@@ -1,11 +1,7 @@
 <?php
 
-<<<<<<< HEAD
-require 'database.php';
-=======
 require_once 'database.php';
->>>>>>> 8730539e1bf526706a7a5ec72eed21575f869892
-
+date_default_timezone_set('PRC');
 $jobname=$_POST['jobName'];
 $twoORthree=$_POST['twoORthree'];
 $canReturn=$_POST['canReturn'];

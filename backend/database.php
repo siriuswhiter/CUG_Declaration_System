@@ -53,28 +53,6 @@ function get_db(){
 }
 
 
-<<<<<<< HEAD
-function query($sql)
-{
-    $mysqli = getdb();
-    $result = mysqli_query($mysqli, $sql);
-    $data = [];
-    if ($result && mysqli_num_rows($result) > 0) {
-        while ($res = mysqli_fetch_assoc($result)) {
-            $data[] = $res;
-        }
-    }
-    return $data;
-}
-
-function execute($sql)
-{
-    $mysqli = getdb();
-    mysqli_query($mysqli, $sql);
-    return mysqli_affected_rows($mysqli) > 0;
-}
-=======
 
 ?>
 
->>>>>>> 8730539e1bf526706a7a5ec72eed21575f869892
