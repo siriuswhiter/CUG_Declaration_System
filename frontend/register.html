@@ -1,22 +1,27 @@
-<h2>用户注册登录系统</h2>
+<h2>register & login system</h2>
 <hr>
 <form action="../backend/register.php" method="POST" enctype="multipart/form-data">
     id:
     <input type="text" name="id" size="20" maxlength="15">
+    <br>
+    <br>
 
-    用户名：
-    <input type="text" name="username" size="20" maxlength="15" placeholder="必须填写用户名">
-
-    登录密码：
-    <input type="password" name="password" size="20" maxlength="15">
+    username:
+    <input type="text" name="username" size="20" maxlength="15">
+    <br>
     <br>
     
-    确认密码：
+    password:
+    <input type="password" name="password" size="20" maxlength="15">
+    <br>
+    <br>
+
+    confirm password:
     <input type="password" name="confirmPassword" size="20" maxlength="15">
+    <br>
     <br>
 
 
-
-    <input type="submit" name="submit" value="注册">
-    <input type="reset" name="cancel" value="重填">
+    <input type="submit" name="submit" value="submit">
+    <input type="reset" name="cancel" value="reset">
 </form>
