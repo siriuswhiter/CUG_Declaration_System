@@ -74,6 +74,9 @@ height:30px;
 .smart-green .button {
 
 background-color: #9DC45F;
+margin-top: 20px;
+margin-left: 205px;
+
 border-radius: 5px;
 -webkit-border-radius: 5px;
 -moz-border-border-radius: 5px;
@@ -81,6 +84,7 @@ border: none;
 padding: 10px 25px 10px 25px;
 color: #FFF;
 text-shadow: 1px 1px 1px #949494;
+
 }
 .smart-green .button:hover {
 background-color:#80A24A;
@@ -91,6 +95,7 @@ background-color:#80A24A;
 }
 
 .zidingyi button{
+   
     background-color: #9DC45F;
     width:10px;
     padding: 6px 20px 7px 15px;
