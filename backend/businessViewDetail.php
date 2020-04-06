@@ -1,14 +1,14 @@
 <?php
     require_once 'database.php';
     $no=$_GET['no'];
-    $sql="select * from jobs where jobNO='$no' limit 1;";
-    
+    $sql="select * from business where bussinessid='$no' limit 1;";
+    echo $sql;
     $result=query($sql)[0];
-    $canReturn=$result['canReturn']?'是':'否';
+    $canReturn=$result['allowret']?'是':'否';
     
-    $dengji=$result['twoORthree']-2 ?'三级':'二级';
-    $ziduan=unserialize( $result['ziduans']); 
-    $attri= unserialize($result['attributes']);
+    // $dengji=$result['approvelevel']-2 ?'三级':'二级';
+    $ziduan=unserialize( $result['texts']); 
+    $attri= unserialize($result['textstype']);
     
 ?>
 
@@ -21,7 +21,7 @@
 </head>
 <body>
    <h1>
-   业务： <?php  echo $result['jobName'];?>
+   业务： <?php  echo $result['bussinessname'];?>
    </h1>
    <h2>
    可退回：<?php  echo $canReturn ;?>

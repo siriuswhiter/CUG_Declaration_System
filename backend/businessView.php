@@ -2,10 +2,11 @@
     header('content-type:text/html;charset=utf-8');
     require 'database.php';
     date_default_timezone_set('PRC');
-    $sql="SELECT jobNO,jobName,create_time,is_over FROM `jobs`;";
+    $sql="SELECT bussinessid,bussinessname,starttime,endtime FROM `business`;";
 
     $result=query($sql);
-    
+    array_pop($result);
+    // print_r($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +31,7 @@
                     创建时间
                 </th>
     <th>
-                    是否结束
+                    结束时间
                 </th>
             </tr>
         </thead>
@@ -39,16 +40,17 @@
         <tr class="success">
             <td>
             
-            <?php echo $val['jobNO'];?>
+            <?php echo $val['bussinessid'];?>
             </td>
             <td>
-            <a href="jobViewDetail.php?no=<?php echo $val['jobNO'] ?>"><?php echo $val['jobName'];?></a>
+            <a href="businessViewDetail.php?no=<?php echo $val['bussinessid'] ?>"><?php echo $val['bussinessname'];?></a>
             </td>
             <td>
-            <?php echo date("m/d/Y ",$val['create_time']);?>
+            <?php echo  substr($val['starttime'],0,10) ;?>
+            
             </td>
             <td>
-            <?php echo $val['is_over'];?>
+            <?php echo substr($val['endtime'],0,10);?>
             </td>
         </tr>
     <?php endforeach;?>

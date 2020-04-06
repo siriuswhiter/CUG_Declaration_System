@@ -3,24 +3,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>业务生成界面</title>
-    <link rel="stylesheet" id="templatecss" type="text/css" href="../css/smart-green.css">
+    <!-- <link rel="stylesheet" id="templatecss" type="text/css" href="../css/smart-green.css"> -->
 </head>
-<body>
+<body onload="oneTothirty()">
 
-<form action="../backend/jobGen.php" method="post" class="smart-green">
+<form action="../backend/businessGen.php" method="post" class="smart-green">
     <h1>业务生成界面</h1>
         <h2>业务基本信息</h2>
         业务名称：
-            <input type="text" name="jobName" id="jobName" required="required">
+            <input type="text" name="businessName" id="businessName" required="required">
             
             <div>
             业务等级：
-            两级<input type="radio" name="twoORthree"  checked="checked" value=2 >
-            三级<input type="radio" name="twoORthree"  value=3>
+            班级可审<input type="checkbox" name="approvelevel[]"  checked="checked" value=1 >
+            院级可审<input type="checkbox" name="approvelevel[]"  value=2>
+            校级可审<input type="checkbox" name="approvelevel[]"  value=4>
             <br>
             是否可退回修改：
-            是<input type="radio" name="canReturn"  checked="checked" value=1>
-            否<input type="radio" name="canReturn"  value=0>
+            是<input type="radio" name="allowret"  checked="checked" value=1>
+            否<input type="radio" name="allowret"  value=0>
+            
+            </div>
+            
+            <div>
+
+            业务持续时间：
+            <select id="oneTothirty" name="span" ></select>
             </div>
             
         <h2>业务字段信息</h2>
@@ -117,5 +125,15 @@
         zidingyi=document.getElementById("zidingyi");
         zidingyi.removeChild(del_div);
         return false;
+    }
+
+    function oneTothirty(){
+        
+        select =document.getElementById("oneTothirty");
+        for (var i =1 ;i<31;i++){
+
+            select.options.add(new Option(i,i));
+        }
+        select.selectedIndex=13;
     }
 </script>
