@@ -1,38 +1,37 @@
 <?php
 
 require_once "database.php";
+header('Content-Type:text/json;charset=utf-8');
 
 $id = $_POST['id'];
-$username = $_POST['username'];
 $password = $_POST['password'];
 
 function checkid($id){
     $pattern = "/20(16|17|18|19|20)\d{7}/";
     return preg_match($pattern, $id);
-    //return true;
+}
+
+function sha256($str = ''){
+    return hash("sha256", $str);
 }
 
 if(!checkid($id)){
-    $errmsg = "ERR! Id is malformed";
-    die($errmsg);
+    echo json_encode(array('status'=>false,'code'=>1));
 }
 
 
 $mysqli = get_db();
 
-$errmsg = "";
-$que = "SELECT 1 FROM users WHERE userid = '$id' limit 1";
-if(empty(query($que))){
-    $errmsg = "ERR! id dosen't exist";
-    die($errmsg);
+
+$que = "SELECT salt FROM users WHERE userid = '$id' limit 1";
+$result = query($que);
+if(empty($result)){
+    echo json_encode(array('status'=>false,'code'=>1));
 }
 
 
-$que = "SELECT salt FROM users WHERE userid = '$id' limit 1";
-$salt = query($que)[0]['salt'];
-$password = md5($password.$salt);
-
-
+$salt = $result[0]['salt'];
+$password = sha256($password.$salt);
 
 $que = "SELECT 1 FROM users WHERE userid = '$id'  AND password = '$password' limit 1";
 /**
@@ -44,11 +43,10 @@ if(!empty(query($que))){
     session_start();
     $_SESSION["userid"] = $id;
     #header("Location:../index.php");
-    echo "Login Success!";
+    return json_encode(array('status'=>true,'code'=>0));
 }else{
     #header("Location:login.php");
-    $errmsg =  "ERR! wrong id or password";
-    die($errmsg);
+    return json_encode(array('status'=>false,'code'=>1));
 }
 
 

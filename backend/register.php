@@ -24,6 +24,10 @@ function check(){
     }
 }
 
+function sha256($str = ''){
+    return hash("sha256", $str);
+}
+
 
 check();
 
@@ -38,7 +42,7 @@ if(!empty(query($que))) {
 }
 
 $salt = md5(time());
-$password = md5($password.$salt);
+$password = sha256($password.$salt);
 
 $que = "INSERT INTO users (userid,username,salt,password,role)value('$id','$username','$salt','$password','0')";
 

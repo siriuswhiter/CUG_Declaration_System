@@ -1,27 +1,43 @@
-<h2>register & login system</h2>
-<hr>
-<form action="../backend/register.php" method="POST" enctype="multipart/form-data">
-    id:
-    <input type="text" name="id" size="20" maxlength="15">
-    <br>
-    <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel = "stylesheet" type="text/css" href="../css/style.css">
+</head>
 
-    username:
-    <input type="text" name="username" size="20" maxlength="15">
-    <br>
-    <br>
+
+<body>
+    <div class="wrap">
+    <div class="container">
+        <h1 style="color: rgb(245, 236, 236); margin: 0; text-align: center">注册</h1>
+        <form action="../backend/register.php" method="post">
+            <label><input type="text" name="id" placeholder="ID Number"/></label>
+            <label><input type="text" name="username" placeholder="Name"/></label>
+            <label><input type="text" name="phone" placeholder="Phone Number"/></label>
+            <label><input type="text" name="addr" placeholder="Address"/></label>
+            <label><input type="password" name="password" placeholder="Password" /></label>
+            <label><input type="password" name="confirmPassword" placeholder="Confirm Password" /></label>
     
-    password:
-    <input type="password" name="password" size="20" maxlength="15">
-    <br>
-    <br>
-
-    confirm password:
-    <input type="password" name="confirmPassword" size="20" maxlength="15">
-    <br>
-    <br>
-
-
-    <input type="submit" name="submit" value="submit">
-    <input type="reset" name="cancel" value="reset">
-</form>
+            <input type="submit" value="Sign up"/>
+            <p class="change_link" style="text-align: center">
+                <span class="text">已经有账户了？点击登录?</span>
+                <a href="./login.html" class="to_login"> Go and Sign in </a>
+            </p>
+        </form>
+    </div>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+</body>
+</html>
