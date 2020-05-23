@@ -28,8 +28,33 @@
                 </div>
             </div>
         </div>
-        <div class="project">
-            
+        <div class="business">
+            <div class="business-list">
+            <table class="table" id="table-business">
+                <!-- <thead>
+                    <tr>
+                        <th>
+                            业务编号
+                        </th>
+                        
+                        <th>
+                            业务名称
+                        </th>
+                        <th>
+                            开始日期
+                        </th>
+                        <th>
+                            截止日期
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </thead> -->
+                <tbody id="businesslist">
+                </tbody>
+            </table>
+            </div>
         </div>
 
         <script>
@@ -37,10 +62,33 @@
                 $("#welcome").html(id);
             }
 
-            function showTable(info){
-                return;
+            function showLine(info){
+                var tr = $("<tr></tr>");
+                tr.html("<td>" + info.bussinessid + "</td>"+"<td>" + info.bussinessname+"</td>"+"<td>"+info.starttime+"</td>"+"<td>"+info.endtime+"</td>"+"<td><input type='button' value='申请' id ='applybtn'></input></td>"); //+"<td>"+btn+a+"</a>"+"</input>"+"</td>"
+                $("tbody").append(tr);
+                
             }
 
+            $(document).on("click",'#applybtn',function() {
+                if(islogin!==''){
+                    var id = $(this).parents("tr").children("td").eq(0).text();
+                    location.href = "../backend/businessViewDetail.php?no="+id;
+                }else{
+                    location.href = "./login.html";
+                }
+            })
+
+            function renderLine(){
+                var table = document.getElementById("table-business");
+                var len = table.rows.length;
+                for (i = 0; i < len; i++) {
+                    if (i % 2 == 0) {
+                        table.rows[i].style.backgroundColor = 'rgb(152, 197, 125)';
+                    } else {
+                        table.rows[i].style.backgroundColor = 'rgb(142, 203, 207)';
+                    }
+                }
+            }
 
             $.ajax({
                 url:'../backend/index.php',
@@ -57,7 +105,13 @@
                     else
                     {
                         info = result.data;
-                        showTable(info);
+                        for(i =0;i<info.length;i++){
+                            if(info[i] != null){
+                                showLine(info[i]);
+                    
+                            }
+                        }
+                        renderLine();
                     }
                 },
                 error:function(){

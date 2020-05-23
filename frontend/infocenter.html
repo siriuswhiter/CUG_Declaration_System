@@ -16,6 +16,8 @@
                 <div class="header-nav-right">
                     <ul id="loginaf">
                         <li><a href="./index.html">首页</a></li>
+                        <li><a href="./infocenter.html">个人信息</a></li>
+                        <li><a href="./index.html">个人项目</a></li>
                         <li id="logout"><a href="">退出</a></li>
                     </ul>
                     
@@ -23,38 +25,68 @@
             </div>
         </div>
         <div class="user">
-            <script>
-
-                function getCookie(id) {
-                    var strCookie = document.cookie;
-                    var arrCookie = strCookie.split("; ");
-                    for (var i = 0; i < arrCookie.length; i++) {
-                        var arr = arrCookie[i].split("=");
-                        if (arr[0] == id)
-                            return arr[1];
-                    }
-                    return "";
-                }
-    
-                function exitLogin() {
-                    document.cookie = "id=";
-                    document.cookie = "password=";
-                    window.location.reload(true);
-                }
-
-                $('#logout').click(function(){
-                    exitLogin();
-                })
-
-                var islogin = getCookie("id");
-                if(islogin!==''){
-                    $("#loginbf").hide();
-                    $("#loginaf").show();
-                }else{
-                    location.href = "./login.html"
-                }
-            </script>
         </div>
+
+        <script>
+            function getCookie(id) {
+                var strCookie = document.cookie;
+                var arrCookie = strCookie.split("; ");
+                for (var i = 0; i < arrCookie.length; i++) {
+                    var arr = arrCookie[i].split("=");
+                    if (arr[0] == id)
+                        return arr[1];
+                }
+                return "";
+            }
+
+            function exitLogin() {
+                document.cookie = "id=";
+                document.cookie = "password=";
+                window.location.reload(true);
+            }
+
+            $('#logout').click(function(){
+                exitLogin();
+            })
+
+            var islogin = getCookie("id");
+            if(islogin!==''){
+                $("#loginbf").hide();
+                $("#loginaf").show();
+            }else{
+                location.href = "./login.html"
+            }
+
+            $.ajax({
+                url:'../backend/info.php',
+                type:'post',
+                dataType:'json',
+                data:{
+                    userid:getCookie('id'),
+                    password:getCookie('password'),
+                },
+                success:function(result){
+                    if(result.status == false){
+                        alert('出错了');
+                    }
+                    else
+                    {
+                        if(result.code=='0'){
+                            info = result.data;
+                            for(i =0;i<info.length;i++){
+                                if(info[i] != null){
+                                    pass;//showLine(info[i]);
+                                }
+                            }
+                        }
+
+                    }
+                },
+                error:function(){
+                    alert('出错了~~');
+                }
+            })
+        </script>
     </body>
 </html>
 

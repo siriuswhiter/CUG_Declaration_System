@@ -56,7 +56,7 @@ function create_tb_business($mysqli){
         bussinessid BIGINT(32) PRIMARY KEY  AUTO_INCREMENT ,
         bussinessname VARCHAR(64) NOT NULL,
         description VARCHAR(1024),
-        belongcollege INT NOT NULL,
+        belongcollege INT,
         textstype VARCHAR(1024) NOT NULL,
         texts VARCHAR(1024) NOT NULL,
         starttime DATETIME NOT NULL,
