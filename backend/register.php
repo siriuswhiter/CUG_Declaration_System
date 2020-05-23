@@ -1,10 +1,11 @@
 <?php
 require_once "database.php";
+header('Content-Type:text/json;charset=utf-8');
+
 
 $id = $_POST['id'];
 $username = $_POST['username'];
 $password = $_POST['password'];
-$confirmPassword = $_POST['confirmPassword'];
 
 function checkid($id){
     $pattern = "/20(16|17|18|19|20)\d{7}/";
@@ -14,13 +15,8 @@ function checkid($id){
 function check(){
     $id = $GLOBALS['id'];
     if(!checkid($id)){
-        $errmsg = "ERR! id is malformed";
-        die($errmsg);
-    }
-    
-    if($password != $confirmPassword){
-        $errmsg = "ERR! Password and confirmPassword do not match";
-        die($errmsg);
+        echo json_encode(array('status'=>false,'code'=>1));
+        die();
     }
 }
 
@@ -33,12 +29,12 @@ check();
 
 $mysqli = get_db();
 
-$errmsg = "";
 
 $que = "SELECT 1 FROM users WHERE userid = '$id' limit 1";
 if(!empty(query($que))) {
-    $errmsg = "ERR! id has existed";
-    die($errmsg);
+    echo json_encode(array('status'=>false,'code'=>1));
+    die();
+
 }
 
 $salt = md5(time());
@@ -47,12 +43,13 @@ $password = sha256($password.$salt);
 $que = "INSERT INTO users (userid,username,salt,password,role)value('$id','$username','$salt','$password','0')";
 
 if(execute($que)==false){
-    $errmsg = "ERR! insert failed";
-    die($errmsg);
+    echo json_encode(array('status'=>false,'code'=>1));
+    die();
 }
 
-echo "Register Success!! Jump to login page in two seconds......";
+echo json_encode(array('status'=>true,'code'=>0));
+#echo "Register Success!! Jump to login page in two seconds......";
 $mysqli->close();
-echo "<script>setTimeout(\"window.location.href='../frontend/login.html'\",00);</script>";
+#echo "<script>setTimeout(\"window.location.href='../frontend/login.html'\",00);</script>";
 
 ?>

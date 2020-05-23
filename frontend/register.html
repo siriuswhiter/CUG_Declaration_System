@@ -1,4 +1,87 @@
 <!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <link rel = "stylesheet" type="text/css" href="../css/main_style.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-nav">
+                <div class="header-nav-left">
+                    <h3>注册界面</h3>
+                </div>
+                <div class="header-nav-right">
+                    <ul>
+                        <li><a href="./index.html">首页</a></li>
+                        <li><a href="./login.html">登录</a></li>
+                        <li><a href="" onclick="window.location.reload()">注册</a></li>
+                        <!-- <li><a href="">退出</a></li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="user">
+            <div class="user-list">
+                <form id="form1" action="" method="post">
+                    <ul>
+                        <li><label>学号</label><input type="text" name="id" id="id" placeholder="学号或工号"/></li>
+                        <li><label>姓名</label><input type="text" name="name" id="name" placeholder="真实姓名"/></li>
+                        <li><label>密码</label><input type="password" name="password" id="password" placeholder="密码" /></li>
+                        <li><label>确认密码</label><input type="password" name="confirm_password" id="confirm_password" placeholder="确认密码" /></li>
+                        <div class="buttons">
+                            <a class="onbutton"><button type="submit" id="onsubmit">注册</button></a>
+                        </div>
+                    </ul>    
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+        $(function(){
+            $(".onbutton #onsubmit").on('click',function(){
+                var $id = $("#id").val(),
+                    $name = $("#name").val(),
+                    $password  = $("#password").val(),
+                    $confirm_password  = $("#confirm_password").val();
+                if($id=='' || $name=='' || $password==''){
+                    alert("学号，用户名及密码不能为空");
+                    return false;
+                }else if($password!=$confirm_password){
+                    alert("两次密码不一致");
+                }else{
+                    var datas={
+                        id:$id,
+                        name:$name,
+                        password:$password
+                    };
+                    $.ajax({
+                        url:'../backend/register.php',
+                        type:'post',
+                        dataType:'json',
+                        data:datas,
+                        success:function(result){
+                            if(result.status == false){
+                                alert('注册失败');
+                            }
+                            else
+                            {
+                                alert('注册成功');
+                                location.href = "./login.html";
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })
+                }return false;
+            })
+        })
+        </script>
+    </body>
+</html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -40,4 +123,4 @@
     </ul>
 </div>
 </body>
-</html>
+</html> -->

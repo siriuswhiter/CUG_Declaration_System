@@ -13,14 +13,22 @@
                 <div class="header-nav-left">
                     <h3>登录界面</h3>
                 </div>
+                <div class="header-nav-right">
+                    <ul>
+                        <li><a href="./index.html">首页</a></li>
+                        <li><a href="" onclick="window.location.reload()">登录</a></li>
+                        <li><a href="./register.html">注册</a></li>
+                        <!-- <li><a href="">退出</a></li> -->
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="user">
             <div class="user-list">
                 <form id="form1" action="" method="post">
                     <ul>
-                        <li><label>用户名</label><input type="text" name="id" id="id" placeholder="学号或工号"/></li>
-                        <li><label>密码</label><input type="password" name="password" id="password" placeholder="6-15位密码" /></li>
+                        <li><label>学号</label><input type="text" name="id" id="id" placeholder="学号或工号"/></li>
+                        <li><label>密码</label><input type="password" name="password" id="password" placeholder="密码" /></li>
                         <div class="buttons">
                             <a class="onbutton"><button type="submit" id="onsubmit">登录</button></a>
                         </div>
@@ -29,6 +37,26 @@
             </div>
         </div>
         <script type="text/javascript">
+        function showTips( content, height, time ){  
+            var windowWidth  = $(window).width();  
+            var tipsDiv = '<div class="tipsClass">' + content + '</div>';   
+            $( 'body' ).append( tipsDiv );  
+            $( 'div.tipsClass' ).css({  
+                'top'       : height + 'px',  
+                'left'      : ( windowWidth / 2 ) - 350/2 + 'px',  
+                'position'  : 'absolute',  
+                'padding'   : '3px 5px',  
+                'background': '#8FBC8F',  
+                'font-size' : 12 + 'px',  
+                'margin'    : '0 auto',  
+                'text-align': 'center',  
+                'width'     : '350px',  
+                'height'    : 'auto',  
+                'color'     : '#fff',  
+                'opacity'   : '0.8'  
+            }).show();  
+        };
+
         $(function(){
             $(".onbutton #onsubmit").on('click',function(){
                 var $id = $("#id").val(),
@@ -52,7 +80,12 @@
                             }
                             else
                             {
-                                alert('登录成功');
+                                window.setTimeout(showTips('登录成功，正在跳转至主页...'),300);
+                                location.href="./index.html";
+                                var exp = new Date();
+                                exp.setTime(exp.getTime() + 60 * 1000 * 60 * 2); 
+                                document.cookie = "id=" + $id + ";expires=" + exp.toGMTString();
+                                document.cookie = "password=" + $password + ";expires=" + exp.toGMTString();
                             }
                         },
                         error:function(){
@@ -65,39 +98,3 @@
         </script>
     </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>注册</title>
-    <link rel = "stylesheet" type="text/css" href="../css/style.css">
-</head>
-
-
-<body>
-    <div class="wrap">
-    <div class="container">
-        <h1 style="color: rgb(245, 236, 236); margin: 0; text-align: center">登录</h1>
-        <form action="../backend/login.php" method="post">
-            <label><input type="text" name="id" placeholder="ID Number"/></label>
-            <label><input type="password" name="password" placeholder="Password" /></label>
-    
-            <input type="submit" value="Sign up"/>
-        </form>
-    </div>
-    <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-</div>
-</body>
-</html> -->

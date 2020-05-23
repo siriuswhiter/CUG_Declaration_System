@@ -67,7 +67,7 @@ body,html{
      width:470px;
      height: 250px;
      padding: 15px;
-     margin: 20px auto;
+     margin: 90px auto;
      position: relative;
      background-color: white;
      border: 1px solid #DBDBDB;
@@ -114,7 +114,7 @@ body,html{
      height:35px;
      padding: 5px 10px;
      position: absolute;
-     bottom: 40px;
+     bottom: 90px;
      left: 0px;
      right: 0px;
  }
