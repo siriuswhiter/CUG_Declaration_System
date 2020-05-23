@@ -14,14 +14,9 @@
                     <h3>个人中心</h3>
                 </div>
                 <div class="header-nav-right">
-                    <ul id="loginbf">
-                        <li><a href=""  onclick="window.location.reload()">首页</a></li>
-                        <li><a href="./login.html">登录</a></li>
-                        <li><a href="./register.html">注册</a></li>
-                    </ul>
                     <ul id="loginaf">
-                        <li><a href=""  onclick="window.location.reload()">首页</a></li>
-                        <li id="logout"><a href="">退出</a>
+                        <li><a href="./index.html">首页</a></li>
+                        <li id="logout"><a href="">退出</a></li>
                     </ul>
                     
                 </div>
@@ -29,9 +24,6 @@
         </div>
         <div class="user">
             <script>
-                function showUser(id){
-                    $("#welcome").html(id);
-                }
 
                 function getCookie(id) {
                     var strCookie = document.cookie;
@@ -56,13 +48,10 @@
 
                 var islogin = getCookie("id");
                 if(islogin!==''){
-                    $id = islogin;
-                    showUser($id);
                     $("#loginbf").hide();
                     $("#loginaf").show();
                 }else{
-                    $("#loginbf").show();
-                    $("#loginaf").hide();
+                    location.href = "./login.html"
                 }
             </script>
         </div>

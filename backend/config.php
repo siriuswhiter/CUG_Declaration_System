@@ -55,6 +55,8 @@ function create_tb_business($mysqli){
     $que = "CREATE TABLE IF NOT EXISTS business(
         bussinessid BIGINT(32) PRIMARY KEY,
         bussinessname VARCHAR(64) NOT NULL,
+        description VARCHAR(1024),
+        belongcollege INT NOT NULL,
         textstype VARCHAR(1024) NOT NULL,
         texts VARCHAR(1024) NOT NULL,
         starttime DATETIME NOT NULL,

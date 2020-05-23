@@ -137,3 +137,11 @@ body,html{
 #form2{
     display: none;
 }
+.project {
+    min-width:980px;
+    min-height: 980px;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+}

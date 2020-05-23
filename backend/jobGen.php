@@ -50,7 +50,7 @@ echo '<br>';
 $sql="INSERT INTO `declaresystem`.`jobs` (`jobName`, `canReturn`,`twoORthree`, `ziduans`, `attributes`, `JobNO`, `create_time`, `is_over`) VALUES (' $jobname', '$canReturn','$twoORthree', '$ziduan', '$attribute', NULL, CURRENT_TIMESTAMP, '0');";
 execute($sql);
 echo $sql;
-header('location: jobview.php');
+header('location: jobView.php');
 
 
 
