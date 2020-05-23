@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <link rel = "stylesheet" type="text/css" href="../css/main_style.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-nav">
+                <div class="header-nav-left">
+                    <h3>中国地质大学申报系统</h3>
+                </div>
+                <div class="header-nav-right">
+                    <ul id="loginbf">
+                        <li><a href=""  onclick="window.location.reload()">首页</a></li>
+                        <li><a href="./login.html">登录</a></li>
+                        <li><a href="./register.html">注册</a></li>
+                    </ul>
+                    <ul id="loginaf">
+                        <li><a href=""  onclick="window.location.reload()">首页</a></li>
+                        <li><a id="welcome" href="./infocenter.html"></a></li>
+                        <li id="logout"><a href="">退出</a></li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="user">
+            <script>
+                function showUser(id){
+                    $("#welcome").html(id);
+                }
+
+                function getCookie(id) {
+                    var strCookie = document.cookie;
+                    var arrCookie = strCookie.split("; ");
+                    for (var i = 0; i < arrCookie.length; i++) {
+                        var arr = arrCookie[i].split("=");
+                        if (arr[0] == id)
+                            return arr[1];
+                    }
+                    return "";
+                }
+    
+                function exitLogin() {
+                    document.cookie = "id=";
+                    document.cookie = "password=";
+                    window.location.reload(true);
+                }
+
+                $('#logout').click(function(){
+                    exitLogin();
+                })
+
+                var islogin = getCookie("id");
+                if(islogin!==''){
+                    $id = islogin;
+                    showUser($id);
+                    $("#loginbf").hide();
+                    $("#loginaf").show();
+                }else{
+                    $("#loginbf").show();
+                    $("#loginaf").hide();
+                }
+            </script>
+        </div>
+    </body>
+</html>
+
+

@@ -1,11 +1,100 @@
-<form action="../backend/login.php" method="POST">
-    login
-    <input type="text" name="id" size="20" maxlength="15" placeholder="id">
-    <br>
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <link rel = "stylesheet" type="text/css" href="../css/main_style.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-nav">
+                <div class="header-nav-left">
+                    <h3>登录界面</h3>
+                </div>
+                <div class="header-nav-right">
+                    <ul>
+                        <li><a href="./index.html">首页</a></li>
+                        <li><a href="" onclick="window.location.reload()">登录</a></li>
+                        <li><a href="./register.html">注册</a></li>
+                        <!-- <li><a href="">退出</a></li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="user">
+            <div class="user-list">
+                <form id="form1" action="" method="post">
+                    <ul>
+                        <li><label>学号</label><input type="text" name="id" id="id" placeholder="学号或工号"/></li>
+                        <li><label>密码</label><input type="password" name="password" id="password" placeholder="密码" /></li>
+                        <div class="buttons">
+                            <a class="onbutton"><button type="submit" id="onsubmit">登录</button></a>
+                        </div>
+                    </ul>    
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+        function showTips( content, height, time ){  
+            var windowWidth  = $(window).width();  
+            var tipsDiv = '<div class="tipsClass">' + content + '</div>';   
+            $( 'body' ).append( tipsDiv );  
+            $( 'div.tipsClass' ).css({  
+                'top'       : height + 'px',  
+                'left'      : ( windowWidth / 2 ) - 350/2 + 'px',  
+                'position'  : 'absolute',  
+                'padding'   : '3px 5px',  
+                'background': '#8FBC8F',  
+                'font-size' : 12 + 'px',  
+                'margin'    : '0 auto',  
+                'text-align': 'center',  
+                'width'     : '350px',  
+                'height'    : 'auto',  
+                'color'     : '#fff',  
+                'opacity'   : '0.8'  
+            }).show();  
+        };
 
-    password
-    <input type="password" name="password" size="20" maxlength="15">
-    <br>
-    <input type="submit" value="login">
-    <input type="button" onclick="window.location.href='register.html'" value="register">
-</form>
+        $(function(){
+            $(".onbutton #onsubmit").on('click',function(){
+                var $id = $("#id").val(),
+                    $password  = $("#password").val();
+                if($id=='' || $password==''){
+                    alert("用户名及密码不能为空");
+                    return false;
+                }else{
+                    var datas={
+                        id:$id,
+                        password:$password
+                    };
+                    $.ajax({
+                        url:'../backend/login.php',
+                        type:'post',
+                        dataType:'json',
+                        data:datas,
+                        success:function(result){
+                            if(result.status == false){
+                                alert('学号或密码错误');
+                            }
+                            else
+                            {
+                                window.setTimeout(showTips('登录成功，正在跳转至主页...'),300);
+                                location.href="./index.html";
+                                var exp = new Date();
+                                exp.setTime(exp.getTime() + 60 * 1000 * 60 * 2); 
+                                document.cookie = "id=" + $id + ";expires=" + exp.toGMTString();
+                                document.cookie = "password=" + $password + ";expires=" + exp.toGMTString();
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })
+                }return false;
+            })
+        })
+        </script>
+    </body>
+</html>

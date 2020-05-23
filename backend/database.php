@@ -52,7 +52,4 @@ function get_db(){
     return $mysqli;
 }
 
-
-
 ?>
-

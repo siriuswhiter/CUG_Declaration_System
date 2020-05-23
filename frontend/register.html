@@ -1,27 +1,126 @@
-<h2>register & login system</h2>
-<hr>
-<form action="../backend/register.php" method="POST" enctype="multipart/form-data">
-    id:
-    <input type="text" name="id" size="20" maxlength="15">
-    <br>
-    <br>
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <link rel = "stylesheet" type="text/css" href="../css/main_style.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-nav">
+                <div class="header-nav-left">
+                    <h3>注册界面</h3>
+                </div>
+                <div class="header-nav-right">
+                    <ul>
+                        <li><a href="./index.html">首页</a></li>
+                        <li><a href="./login.html">登录</a></li>
+                        <li><a href="" onclick="window.location.reload()">注册</a></li>
+                        <!-- <li><a href="">退出</a></li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="user">
+            <div class="user-list">
+                <form id="form1" action="" method="post">
+                    <ul>
+                        <li><label>学号</label><input type="text" name="id" id="id" placeholder="学号或工号"/></li>
+                        <li><label>姓名</label><input type="text" name="name" id="name" placeholder="真实姓名"/></li>
+                        <li><label>密码</label><input type="password" name="password" id="password" placeholder="密码" /></li>
+                        <li><label>确认密码</label><input type="password" name="confirm_password" id="confirm_password" placeholder="确认密码" /></li>
+                        <div class="buttons">
+                            <a class="onbutton"><button type="submit" id="onsubmit">注册</button></a>
+                        </div>
+                    </ul>    
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+        $(function(){
+            $(".onbutton #onsubmit").on('click',function(){
+                var $id = $("#id").val(),
+                    $name = $("#name").val(),
+                    $password  = $("#password").val(),
+                    $confirm_password  = $("#confirm_password").val();
+                if($id=='' || $name=='' || $password==''){
+                    alert("学号，用户名及密码不能为空");
+                    return false;
+                }else if($password!=$confirm_password){
+                    alert("两次密码不一致");
+                }else{
+                    var datas={
+                        id:$id,
+                        name:$name,
+                        password:$password
+                    };
+                    $.ajax({
+                        url:'../backend/register.php',
+                        type:'post',
+                        dataType:'json',
+                        data:datas,
+                        success:function(result){
+                            if(result.status == false){
+                                alert('注册失败');
+                            }
+                            else
+                            {
+                                alert('注册成功');
+                                location.href = "./login.html";
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })
+                }return false;
+            })
+        })
+        </script>
+    </body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel = "stylesheet" type="text/css" href="../css/style.css">
+</head>
 
-    username:
-    <input type="text" name="username" size="20" maxlength="15">
-    <br>
-    <br>
+
+<body>
+    <div class="wrap">
+    <div class="container">
+        <h1 style="color: rgb(245, 236, 236); margin: 0; text-align: center">注册</h1>
+        <form action="../backend/register.php" method="post">
+            <label><input type="text" name="id" placeholder="ID Number"/></label>
+            <label><input type="text" name="username" placeholder="Name"/></label>
+            <label><input type="text" name="phone" placeholder="Phone Number"/></label>
+            <label><input type="text" name="addr" placeholder="Address"/></label>
+            <label><input type="password" name="password" placeholder="Password" /></label>
+            <label><input type="password" name="confirmPassword" placeholder="Confirm Password" /></label>
     
-    password:
-    <input type="password" name="password" size="20" maxlength="15">
-    <br>
-    <br>
-
-    confirm password:
-    <input type="password" name="confirmPassword" size="20" maxlength="15">
-    <br>
-    <br>
-
-
-    <input type="submit" name="submit" value="submit">
-    <input type="reset" name="cancel" value="reset">
-</form>
+            <input type="submit" value="Sign up"/>
+            <p class="change_link" style="text-align: center">
+                <span class="text">已经有账户了？点击登录?</span>
+                <a href="./login.html" class="to_login"> Go and Sign in </a>
+            </p>
+        </form>
+    </div>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+</body>
+</html> -->
