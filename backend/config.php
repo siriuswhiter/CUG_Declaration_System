@@ -53,7 +53,7 @@ function create_tb_users($mysqli){
  */
 function create_tb_business($mysqli){
     $que = "CREATE TABLE IF NOT EXISTS business(
-        bussinessid BIGINT(32) PRIMARY KEY,
+        bussinessid BIGINT(32) PRIMARY KEY  AUTO_INCREMENT ,
         bussinessname VARCHAR(64) NOT NULL,
         description VARCHAR(1024),
         belongcollege INT NOT NULL,
@@ -73,7 +73,7 @@ function create_tb_business($mysqli){
  */
 function create_tb_apply($mysqli){
     $que = "CREATE TABLE IF NOT EXISTS apply(
-        applyid BIGINT(32) PRIMARY KEY,
+        applyid BIGINT(32) PRIMARY KEY AUTO_INCREMENT,
         bussinessid BIGINT(32) NOT NULL,
         userid BIGINT(32) NOT NULL,
         selectinfo VARCHAR(1024) NOT NULL,
@@ -90,7 +90,7 @@ function create_tb_apply($mysqli){
  */
 function create_tb_approval($mysqli){
     $que = "CREATE TABLE IF NOT EXISTS approval(
-        applyid BIGINT(32) PRIMARY KEY,
+        applyid BIGINT(32) PRIMARY KEY AUTO_INCREMENT   ,
         approverid BIGINT(32) NOT NULL,
         ispass INT NOT NULL,
         approvertime DATETIME NOT NULL,
