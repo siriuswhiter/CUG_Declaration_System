@@ -10,7 +10,7 @@ $mysqli = get_db();
 $que = "SELECT bussinessid,bussinessname,starttime,endtime FROM `business` limit 20";
 $result = query($que);
 if(empty($result)){
-    echo json_encode(array('status'=>false,'code'=>1));
+    echo json_encode(array('status'=>true,'code'=>1));
     die();
 }
 

@@ -30,30 +30,11 @@
         </div>
         <div class="business">
             <div class="business-list">
-            <table class="table" id="table-business">
-                <!-- <thead>
-                    <tr>
-                        <th>
-                            业务编号
-                        </th>
-                        
-                        <th>
-                            业务名称
-                        </th>
-                        <th>
-                            开始日期
-                        </th>
-                        <th>
-                            截止日期
-                        </th>
-                        <th>
-                            操作
-                        </th>
-                    </tr>
-                </thead> -->
+                <!-- <div class="cardBox"><div class="headerBox" style="background-color: #52d0da;"><p><a title="查看详情" style="cursor: pointer; color:white">奖学金</a></p></div><div class="bodyBox"><p>开始时间2020-05-23 00:00:00</p><p>结束时间2020-06-06 00:00:00</p><p>是否过期：<span style="color:green">未过期</span></p></div></div> -->
+                <!-- <table class="table" id="table-business">
                 <tbody id="businesslist">
                 </tbody>
-            </table>
+            </table> -->
             </div>
         </div>
 
@@ -63,10 +44,26 @@
             }
 
             function showLine(info){
-                var tr = $("<tr></tr>");
-                tr.html("<td>" + info.bussinessid + "</td>"+"<td>" + info.bussinessname+"</td>"+"<td>"+info.starttime+"</td>"+"<td>"+info.endtime+"</td>"+"<td><input type='button' value='申请' id ='applybtn'></input></td>"); //+"<td>"+btn+a+"</a>"+"</input>"+"</td>"
-                $("tbody").append(tr);
-                
+                // var tr = $("<tr></tr>");
+                // tr.html("<td>" + info.bussinessid + "</td>"+"<td>" + info.bussinessname+"</td>"+"<td>"+info.starttime+"</td>"+"<td>"+info.endtime+"</td>"+"<td><input type='button' value='申请' id ='applybtn'></input></td>"); //+"<td>"+btn+a+"</a>"+"</input>"+"</td>"
+                // $("tbody").append(tr);
+                var div = $("<div></div>");
+                var html = '<div class="cardBox"><div class="headerBox"><p><a title="查看详情" style="cursor: pointer; color:white">'+info.bussinessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.bussinessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
+                var expire = 1;
+                if(Date.now() < Date.parse(info.endtime)){
+                    expire = 0;
+                    html += '<span style="color:green">未过期</span></p></div></div>';
+                }else{
+                    expire = 1;
+                    html += '<span style="color:red">已过期</span></p></div></div>'
+                }
+                div.html(html);
+                $(".business-list").prepend(div);
+
+                if(!expire)
+                    $('.headerBox').attr('style',"background-color: rgb(104, 182, 238)");
+                else
+                    $('.headerBox').attr('style',"background-color: rgb(179, 33, 33)");
             }
 
             $(document).on("click",'#applybtn',function() {
@@ -78,17 +75,17 @@
                 }
             })
 
-            function renderLine(){
-                var table = document.getElementById("table-business");
-                var len = table.rows.length;
-                for (i = 0; i < len; i++) {
-                    if (i % 2 == 0) {
-                        table.rows[i].style.backgroundColor = 'rgb(152, 197, 125)';
-                    } else {
-                        table.rows[i].style.backgroundColor = 'rgb(142, 203, 207)';
-                    }
-                }
-            }
+            // function renderLine(){
+            //     var table = document.getElementById("table-business");
+            //     var len = table.rows.length;
+            //     for (i = 0; i < len; i++) {
+            //         if (i % 2 == 0) {
+            //             table.rows[i].style.backgroundColor = 'rgb(152, 197, 125)';
+            //         } else {
+            //             table.rows[i].style.backgroundColor = 'rgb(142, 203, 207)';
+            //         }
+            //     }
+            // }
 
             $.ajax({
                 url:'../backend/index.php',
@@ -100,18 +97,21 @@
                 },
                 success:function(result){
                     if(result.status == false){
-                        alert('莫得项目');
+                        alert('出错了~~');
                     }
                     else
                     {
-                        info = result.data;
-                        for(i =0;i<info.length;i++){
-                            if(info[i] != null){
-                                showLine(info[i]);
-                    
+                        if(result.code==0){
+                            info = result.data;
+                            for(i =0;i<info.length;i++){
+                                if(info[i] != null){
+                                    showLine(info[i]);
+                                }
                             }
+                            //renderLine();
+                        }else{
+                            alert("莫得项目");
                         }
-                        renderLine();
                     }
                 },
                 error:function(){

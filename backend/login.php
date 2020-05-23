@@ -26,8 +26,7 @@ if(!checkid($id)){
 
 $mysqli = get_db();
 
-
-$que = "SELECT salt FROM users WHERE userid = '$id' limit 1";
+$que = "SELECT salt,password FROM users WHERE userid = '$id' limit 1";
 $result = query($que);
 if(empty($result)){
     echo json_encode(array('status'=>false,'code'=>1));
@@ -36,15 +35,12 @@ if(empty($result)){
 
 
 $salt = $result[0]['salt'];
+$store_password = $result[0]['password'];
+
 $password = sha256($password.$salt);
 
-$que = "SELECT 1 FROM users WHERE userid = '$id'  AND password = '$password' limit 1";
-/**
- * 验证成功，设置session生存周期为两小时
- */
-if(!empty(query($que))){
+if($store_password==$password){
     $_SESSION["userid"] = $id;
-    #header("Location:../index.php");
     echo json_encode(array('status'=>true,'code'=>0));
 }else{
     #header("Location:login.php");

@@ -144,11 +144,36 @@ body,html{
 }
 
 .business-list{
-    width:800px;
-    min-height: 300px;
+    width:1300px;
+    min-height: 570px;
     padding: 15px;
-    margin: 100px auto;
+    margin: 20px auto;
     position: relative;
     background-color: white;
     border: 1px solid rgb(142, 203, 207);
+}
+
+.cardBox {
+    width: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+    float: left;
+    margin-right: 10px;
+    padding: 5px;
+    padding-top: 15px;
+}
+
+.headerBox {
+    color: #fff;
+    padding: 10px;
+    font-size: 15px;
+    height: 60px;
+}
+
+.bodyBox {
+    padding: 10px;
+}
+
+.bodyBox p {
+    margin-left: 5px;
 }
