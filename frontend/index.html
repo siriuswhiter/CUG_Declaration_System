@@ -43,8 +43,8 @@
 
                 </div>
                 <div id="pageBox">
-                    <a href="" id ="lastpage" class="pageBtn">上一页</a>
-                    <a href="" id ="nextpage" class="pageBtn">下一页</a>
+                    <a  id ="lastpage" class="pageBtn" style="cursor: pointer">上一页</a>
+                    <a  id ="nextpage" class="pageBtn" style="cursor: pointer">下一页</a>
                 </div>
             </div>
 
@@ -53,6 +53,7 @@
             function showUser(id){
                 $("#welcome").html(id);
             }
+
 
             function showLine(info){
                 var div = $("<div></div>");
@@ -66,18 +67,24 @@
                 $(".business-list").prepend(div);
             }
 
+
             function showPage(divpage){
                 for(i =divpage;i>=1;i--){
                     var a = $("<a></a>");
-                    html = '<a href="">'+i+'</a>';
-                    console.log(html);
+                    html = '<a href="./index.html?page='+i+'">'+i+'</a>';
                     a.html(html);
                     $("#lastpage").after(a);
                 }
             }
         
-
+            var divpage;
             $(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+
                 var businessid="*",businessname="*",starttime="*",endtime="*";
                 $('#search-btn').click(function(){
                     businessid = document.getElementById("input-id").value;
@@ -112,9 +119,10 @@
                                 $(".business-list").html('');
                                 if(result.code==0){
                                     info = result.data;
-                                    var divpage = parseInt(Math.ceil(info.length/6));
+                                    divpage = parseInt(Math.ceil(info.length/6));
                                     showPage(divpage);
-                                    for(i =0;i<Math.min(6,info.length);i++){
+                                    var reallength = info.length-1;
+                                    for(i = reallength-6*(curpage);i<reallength-6*(curpage-1);i++){
                                         if(info[i] != null){
                                             showLine(info[i]);
                                         }
@@ -132,6 +140,31 @@
                 $('#search-btn').click();
             });
             
+            $('#lastpage').click(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+                lastpage = curpage-1;
+                if(lastpage<=0)
+                    lastpage = 1;
+                $("#lastpage").attr("href","./index.html?page="+lastpage); 
+            })
+
+            
+            $('#nextpage').click(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+                nextpage = +curpage+1;
+                if(nextpage>divpage)
+                    nextpage=divpage;
+                $("#nextpage").attr("href","./index.html?page="+nextpage); 
+            })
+
             function getCookie(id) {
                 var strCookie = document.cookie;
                 var arrCookie = strCookie.split("; ");

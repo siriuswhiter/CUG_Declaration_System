@@ -65,7 +65,11 @@ if(empty($result)){
     die();
 }
 
+// $page = 0;
+// if(isset($_POST['page']))
+//     $page = $_POST['page'];
 
+// $result = array_slice($result,6*$page,6*($page+1));
 echo json_encode(array('status'=>true,'code'=>0,'data'=>$result));
 
 
