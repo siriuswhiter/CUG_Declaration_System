@@ -2,7 +2,7 @@
     header('content-type:text/html;charset=utf-8');
     require 'database.php';
     date_default_timezone_set('PRC');
-    $sql="SELECT bussinessid,bussinessname,starttime,endtime FROM `business`;";
+    $sql="SELECT businessid,businessname,starttime,endtime FROM `business`;";
 
     $result=query($sql);
     array_pop($result);
@@ -40,10 +40,10 @@
         <tr class="success">
             <td>
             
-            <?php echo $val['bussinessid'];?>
+            <?php echo $val['businessid'];?>
             </td>
             <td>
-            <a href="businessViewDetail.php?no=<?php echo $val['bussinessid'] ?>"><?php echo $val['bussinessname'];?></a>
+            <a href="businessViewDetail.php?no=<?php echo $val['businessid'] ?>"><?php echo $val['businessname'];?></a>
             </td>
             <td>
             <?php echo  substr($val['starttime'],0,10) ;?>

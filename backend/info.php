@@ -41,7 +41,7 @@ $store_password = $result[0]['password'];
 $password = sha256($password.$salt);
 
 if($store_password==$password){
-    $que = "SELECT bussinessid,bussinessname,starttime,endtime FROM users NATURAL JOIN apply WHERE userid='$userid'";
+    $que = "SELECT businessid,businessname,starttime,endtime FROM users NATURAL JOIN apply WHERE userid='$userid'";
     $result = query($que);
     if(!empty($result)){
         echo json_encode(array('status'=>true,'code'=>0,'data'=>$result));

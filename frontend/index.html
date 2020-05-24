@@ -29,96 +29,109 @@
             </div>
         </div>
         <div class="business">
-            <div class="business-list">
-                <!-- <div class="cardBox"><div class="headerBox" style="background-color: #52d0da;"><p><a title="查看详情" style="cursor: pointer; color:white">奖学金</a></p></div><div class="bodyBox"><p>开始时间2020-05-23 00:00:00</p><p>结束时间2020-06-06 00:00:00</p><p>是否过期：<span style="color:green">未过期</span></p></div></div> -->
-                <!-- <table class="table" id="table-business">
-                <tbody id="businesslist">
-                </tbody>
-            </table> -->
-            </div>
-        </div>
+            
+            <div class="business-div">
+                <div class="choice-list">
+                
+                        <a><label>编号：</label><input type="text" id="input-id" name="input-id" placeholder="项目编号"></a>
+                        <a><label>名称：</label><input type="text" id="input-name" name="input-name" placeholder="项目名称"></a>
+                        <a><label>开始日期：</label><input type="date" id="input-starttime" name="input-starttime" placeholder="开始日期"/></a>
+                        <a><label>结束日期：</label><input type="date" id="input-endtime" name="input-endtime" placeholder="结束日期"></a>
+                        <a><input type="button" id="search-btn" value="搜索"></a>
+                </div>
+                <div class="business-list">
 
+                </div>
+                <div id="pageBox">
+                    <a href="" id ="lastpage" class="pageBtn">上一页</a>
+                    <a href="" id ="nextpage" class="pageBtn">下一页</a>
+                </div>
+            </div>
+
+        </div>
         <script>
             function showUser(id){
                 $("#welcome").html(id);
             }
 
             function showLine(info){
-                // var tr = $("<tr></tr>");
-                // tr.html("<td>" + info.bussinessid + "</td>"+"<td>" + info.bussinessname+"</td>"+"<td>"+info.starttime+"</td>"+"<td>"+info.endtime+"</td>"+"<td><input type='button' value='申请' id ='applybtn'></input></td>"); //+"<td>"+btn+a+"</a>"+"</input>"+"</td>"
-                // $("tbody").append(tr);
                 var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox"><p><a title="查看详情" style="cursor: pointer; color:white">'+info.bussinessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.bussinessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
-                var expire = 1;
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
                 if(Date.now() < Date.parse(info.endtime)){
-                    expire = 0;
                     html += '<span style="color:green">未过期</span></p></div></div>';
                 }else{
-                    expire = 1;
                     html += '<span style="color:red">已过期</span></p></div></div>'
                 }
                 div.html(html);
                 $(".business-list").prepend(div);
-
-                if(!expire)
-                    $('.headerBox').attr('style',"background-color: rgb(104, 182, 238)");
-                else
-                    $('.headerBox').attr('style',"background-color: rgb(179, 33, 33)");
             }
 
-            $(document).on("click",'#applybtn',function() {
-                if(islogin!==''){
-                    var id = $(this).parents("tr").children("td").eq(0).text();
-                    location.href = "../backend/businessViewDetail.php?no="+id;
-                }else{
-                    location.href = "./login.html";
+            function showPage(divpage){
+                for(i =divpage;i>=1;i--){
+                    var a = $("<a></a>");
+                    html = '<a href="">'+i+'</a>';
+                    console.log(html);
+                    a.html(html);
+                    $("#lastpage").after(a);
                 }
-            })
+            }
+        
 
-            // function renderLine(){
-            //     var table = document.getElementById("table-business");
-            //     var len = table.rows.length;
-            //     for (i = 0; i < len; i++) {
-            //         if (i % 2 == 0) {
-            //             table.rows[i].style.backgroundColor = 'rgb(152, 197, 125)';
-            //         } else {
-            //             table.rows[i].style.backgroundColor = 'rgb(142, 203, 207)';
-            //         }
-            //     }
-            // }
+            $(function(){
+                var businessid="*",businessname="*",starttime="*",endtime="*";
+                $('#search-btn').click(function(){
+                    businessid = document.getElementById("input-id").value;
+                    if(businessid=='' || businessid==null)
+                        businessid = "*";
+                    businessname = document.getElementById("input-name").value;
+                    if(businessname=='' || businessname==null)
+                        businessname = "*";
+                    starttime = document.getElementById("input-starttime").value;
+                    if(starttime=='' || starttime==null)
+                        starttime = "*";
+                    endtime = document.getElementById("input-endtime").value;
+                    if(endtime=='' || endtime==null)
+                        endtime = "*";
 
-            $.ajax({
-                url:'../backend/index.php',
-                type:'post',
-                dataType:'json',
-                data:{
-                    starttime:'*',
-                    endtime:'*',
-                },
-                success:function(result){
-                    if(result.status == false){
-                        alert('出错了~~');
-                    }
-                    else
-                    {
-                        if(result.code==0){
-                            info = result.data;
-                            for(i =0;i<info.length;i++){
-                                if(info[i] != null){
-                                    showLine(info[i]);
+                    $.ajax({
+                        url:'../backend/index.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            businessid:businessid,
+                            businessname:businessname,
+                            starttime:starttime,
+                            endtime:endtime,
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                            }
+                            else
+                            {
+                                $(".business-list").html('');
+                                if(result.code==0){
+                                    info = result.data;
+                                    var divpage = parseInt(Math.ceil(info.length/6));
+                                    showPage(divpage);
+                                    for(i =0;i<Math.min(6,info.length);i++){
+                                        if(info[i] != null){
+                                            showLine(info[i]);
+                                        }
+                                    }
+                                }else{
+                                    alert("莫得项目");
                                 }
                             }
-                            //renderLine();
-                        }else{
-                            alert("莫得项目");
+                        },
+                        error:function(){
+                            alert('出错了~~');
                         }
-                    }
-                },
-                error:function(){
-                    alert('出错了~~');
-                }
-            })
-
+                    })  
+                });
+                $('#search-btn').click();
+            });
+            
             function getCookie(id) {
                 var strCookie = document.cookie;
                 var arrCookie = strCookie.split("; ");

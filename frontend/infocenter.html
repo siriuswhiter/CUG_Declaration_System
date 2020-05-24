@@ -24,7 +24,35 @@
                 </div>
             </div>
         </div>
-        <div class="user">
+        <div class="business">
+            
+            <div class="business-div">
+                <div class="choice-list">
+                
+                        <a><label>编号：</label><input type="text" id="input-id" name="input-id" placeholder="项目编号"></a>
+                        <a><label>名称：</label><input type="text" id="input-name" name="input-name" placeholder="项目名称"></a>
+                        <a><label>开始日期：</label><input type="date" id="input-starttime" name="input-starttime" placeholder="开始日期"/></a>
+                        <a><label>结束日期：</label><input type="date" id="input-endtime" name="input-endtime" placeholder="结束日期"></a>
+                        <a><input type="button" id="search-btn" value="搜索"></a>
+                </div>
+                <div class="business-list">
+
+                </div>
+                <div id="pageBox">
+                    <a href="" class="pageBtn">上一页</a>
+                    <a href="" class="select">1</a>
+                    <a href="">2</a>
+                    <a href="">3</a>
+                    <a href="">4</a>
+                    <a href="">5</a>
+                    <a href="">6</a>
+                    <a href="">7</a>
+                    <a href="">8</a>
+                    <a href="">9</a>
+                    <a href="" class="pageBtn">下一页</a>
+                </div>
+            </div>
+
         </div>
 
         <script>
@@ -51,14 +79,13 @@
 
             var islogin = getCookie("id");
             if(islogin!==''){
-                $("#loginbf").hide();
                 $("#loginaf").show();
             }else{
                 location.href = "./login.html"
             }
 
             $.ajax({
-                url:'../backend/info.php',
+                url:'../backend/index.php',
                 type:'post',
                 dataType:'json',
                 data:{
@@ -75,12 +102,12 @@
                             info = result.data;
                             for(i =0;i<info.length;i++){
                                 if(info[i] != null){
-                                    pass;//showLine(info[i]);
+                                    showLine(info[i]);
                                 }
                             }
                         }else{
                             alert("还没有申请项目哦");
-                            location.href = "./index.html";
+                            //location.href = "./index.html";
                         }
 
                     }

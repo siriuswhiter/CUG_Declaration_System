@@ -4,9 +4,12 @@ body,html{
     background-image:url('../images/back.jpg');
 }
 .header {
+    widows: 1335px;
     width: 100%;
     padding: 0px;
     margin: 0px;
+    position: relative;
+
     background-color: rgb(123, 169, 202);
 }
 
@@ -143,16 +146,41 @@ body,html{
     position: relative;
 }
 
-.business-list{
-    width:1300px;
-    min-height: 570px;
+.business-div{
+    widows: 1335px;
+    min-height: 500px;
     padding: 15px;
-    margin: 20px auto;
+    margin: 0px auto;
     position: relative;
     background-color: white;
     border: 1px solid rgb(142, 203, 207);
 }
 
+.business-list{
+    width:1320px;
+    min-height: 400px;
+    padding: 10px;
+    margin: 0px auto;
+    position: relative;
+    background-color: rgb(234, 241, 241);
+}
+
+.choice-list{
+    width:1320px;
+    height: 60px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: rgb(234, 241, 241);
+    padding: 15px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.choice-list a{
+    font: "宋体" 12px/20px;
+    float: left;
+    padding: 25px;
+    padding-top: 15px;
+}
 .cardBox {
     width: 200px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -176,4 +204,25 @@ body,html{
 
 .bodyBox p {
     margin-left: 5px;
+}
+
+#pageBox a {
+    width: 17px;
+    height: 20px;
+    text-align: center;
+    color: rgb(123, 169, 202);
+    line-height: 20px;
+    border: 1px solid #e0e1e2;
+    text-decoration: none;
+    display: inline-block;
+    font: "宋体" 12px/20px;
+}
+
+
+#pageBox .pageBtn{
+    width: 64px;
+}
+#pageBox a:hover,.select{
+    background: #516db9;
+    color: #fff;
 }

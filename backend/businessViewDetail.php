@@ -1,7 +1,7 @@
 <?php
     require_once 'database.php';
     $no=$_GET['no'];
-    $sql="select * from business where bussinessid='$no' limit 1;";
+    $sql="select * from business where businessid='$no' limit 1;";
     echo $sql;
     $result=query($sql)[0];
     $canReturn=$result['allowret']?'是':'否';
@@ -21,7 +21,7 @@
 </head>
 <body>
    <h1>
-   业务： <?php  echo $result['bussinessname'];?>
+   业务： <?php  echo $result['businessname'];?>
    </h1>
    <h2>
    可退回：<?php  echo $canReturn ;?>
