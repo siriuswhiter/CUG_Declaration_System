@@ -83,7 +83,7 @@
                                 window.setTimeout(showTips('登录成功，正在跳转至主页...'),300);
                                 location.href="./index.html";
                                 var exp = new Date();
-                                exp.setTime(exp.getTime() + 60 * 1000 * 60 * 2); 
+                                exp.setTime(exp.getTime() + 60 ); 
                                 document.cookie = "id=" + $id + ";expires=" + exp.toGMTString();
                                 document.cookie = "password=" + $password + ";expires=" + exp.toGMTString();
                             }

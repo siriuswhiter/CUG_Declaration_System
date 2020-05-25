@@ -16,8 +16,7 @@
                 <div class="header-nav-right">
                     <ul id="loginaf">
                         <li><a href="./index.html">首页</a></li>
-                        <li><a href="./infocenter.html">个人信息</a></li>
-                        <li><a href="./index.html">个人项目</a></li>
+                        <li><a id="welcome" href="./infocenter.html"></a></li>
                         <li id="logout"><a href="">退出</a></li>
                     </ul>
                     
@@ -25,37 +24,264 @@
             </div>
         </div>
         <div class="business">
-            
             <div class="business-div">
-                <div class="choice-list">
-                
-                        <a><label>编号：</label><input type="text" id="input-id" name="input-id" placeholder="项目编号"></a>
-                        <a><label>名称：</label><input type="text" id="input-name" name="input-name" placeholder="项目名称"></a>
-                        <a><label>开始日期：</label><input type="date" id="input-starttime" name="input-starttime" placeholder="开始日期"/></a>
-                        <a><label>结束日期：</label><input type="date" id="input-endtime" name="input-endtime" placeholder="结束日期"></a>
-                        <a><input type="button" id="search-btn" value="搜索"></a>
+                <div class="slide-list">
+                    <div class="user-control-list">
+                        <ul>
+                            <li><a id="info" style="cursor: pointer">个人信息</a></li>
+                            <li><a id="applied" style="cursor: pointer">已申请项目</a></li>
+                            <li><a id="approval" style="cursor: pointer">待审批项目</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="business-list">
+                <div class="business-all">
+                    <div class="choice-list-info">                 
+                            <a><label>编号：</label><input type="text" id="input-id" name="input-id" placeholder="项目编号"></a>
+                            <a><label>名称：</label><input type="text" id="input-name" name="input-name" placeholder="项目名称"></a>
+                            <a><label>开始日期：</label><input type="date" id="input-starttime" name="input-starttime" placeholder="开始日期"/></a>
+                            <a><label>结束日期：</label><input type="date" id="input-endtime" name="input-endtime" placeholder="结束日期"></a>
+                            <a><input type="button" id="search-btn" value="搜索"></a>
+                    </div>
+                    <div class="business-list-info">
 
-                </div>
-                <div id="pageBox">
-                    <a href="" class="pageBtn">上一页</a>
-                    <a href="" class="select">1</a>
-                    <a href="">2</a>
-                    <a href="">3</a>
-                    <a href="">4</a>
-                    <a href="">5</a>
-                    <a href="">6</a>
-                    <a href="">7</a>
-                    <a href="">8</a>
-                    <a href="">9</a>
-                    <a href="" class="pageBtn">下一页</a>
+                    </div>
+                    <div id="pageBox">
+                        <a  id ="lastpage" class="pageBtn" style="cursor: pointer">上一页</a>
+                        <a  id ="nextpage" class="pageBtn" style="cursor: pointer">下一页</a>
+                    </div>
+                    <div class="info-list">
+                        <li><a>学号</a><input type="text" id="userid"/></li>
+                        <li><a>姓名</a><input type="text" id="username"/></li>
+                        <li><a>性别</a><input type="text" id="sex"></li>
+                        <li><a>学院</a><input type="text" id="academy"></li>
+                        <li><a>班级</a><input type="text" id="class"></li>
+                    </div>
                 </div>
             </div>
 
         </div>
-
         <script>
+            $("#info").click(function() {
+                window.location.hash = '#info';
+                $(".business-list-info").hide();
+                $(".choice-list-info").hide();
+                $("#pageBox").hide();
+                $(".info-list").show();
+            })
+
+            $("#applied").click(function() {
+                window.location.hash = '#applied';
+                $(".info-list").hide();
+                $(".business-list-info").show();
+                $(".choice-list-info").show();
+                $("#pageBox").show();
+            })
+            $("#approval").click(function() {
+                window.location.hash = '#approval';
+                $(".info-list").hide();
+                $(".business-list-info").hide();
+                $(".choice-list-info").hide();
+                $("#pageBox").hide();
+            })
+
+
+            $(function() {
+                userid = getCookie('id');
+                password = getCookie('password');
+                if(userid=='' ||password =='')
+                {
+                    alert('用户未登录');
+                    location.href = "./index.html";
+                }
+                $.ajax({
+                        url:'../backend/info.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            userid:userid,
+                            password:password,
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                                location.href = "./index.html";
+                            }
+                            else
+                            {
+                                if(result.code==0){
+                                    info = result.data;
+                                    $("#userid").attr("value",getCookie('id'));
+                                    $("#userid").attr("disabled","disabled");
+                                    $("#username").attr("value",info['username']);
+                                    if(info['sex']!=null){
+                                        if(info['sex']==0)
+                                            $("#sex").attr("value","女");
+                                        else if(info['sex']==1)
+                                            $("#sex").attr("value","男");
+                                        else
+                                            $("#sex").attr("value","未知");
+                                    }
+
+                                    if(info['academy']!=null){
+                                        $("#academy").attr("value",info['academy']);
+                                    }
+                                    if(info['class']!=null){
+                                        $("#class").attr("value",info['class']);
+                                    }
+                                    //申请权限
+                                    if(info['role']%2==1){
+                                        $("#applied").show();
+                                    }
+                                    //审批权限
+                                    if((info['role']>>1)%2==1){
+                                        $("#approval").show();
+                                    }
+
+                                    //管理权限
+                                    if((info['role']>>2)%2==1){
+                                    }
+                                }
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                            location.href = "./index.html";
+                        }
+                    })  
+            })
+      
+            
+            $(function() {
+                $("#applied").hide();
+                $("#approval").hide();
+                $("#info").click();
+                if(window.location.hash =='#info'){
+                    $("#info").click();
+                }else if(window.location.hash =='#applied'){
+                    $("#applied").click();
+                }else if(window.location.hash=='approval'){
+                    $("#approval").click();
+                }
+            })
+
+            function showUser(id){
+                $("#welcome").html(id);
+            }
+
+
+            function showLine(info){
+                var div = $("<div></div>");
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
+                if(Date.now() < Date.parse(info.endtime)){
+                    html += '<span style="color:green">未过期</span></p></div></div>';
+                }else{
+                    html += '<span style="color:red">已过期</span></p></div></div>'
+                }
+                div.html(html);
+                $(".business-list-info").prepend(div);
+            }
+
+
+            function showPage(divpage){
+                for(i =divpage;i>=1;i--){
+                    var a = $("<a></a>");
+                    html = '<a href="./infocenter.html?page='+i+'">'+i+'</a>';
+                    a.html(html);
+                    $("#lastpage").after(a);
+                }
+            }
+        
+            var divpage;
+            $(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+
+                var businessid="*",businessname="*",starttime="*",endtime="*";
+                $('#search-btn').click(function(){
+                    businessid = document.getElementById("input-id").value;
+                    if(businessid=='' || businessid==null)
+                        businessid = "*";
+                    businessname = document.getElementById("input-name").value;
+                    if(businessname=='' || businessname==null)
+                        businessname = "*";
+                    starttime = document.getElementById("input-starttime").value;
+                    if(starttime=='' || starttime==null)
+                        starttime = "*";
+                    endtime = document.getElementById("input-endtime").value;
+                    if(endtime=='' || endtime==null)
+                        endtime = "*";
+
+                    $.ajax({
+                        url:'../backend/index.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            businessid:businessid,
+                            businessname:businessname,
+                            starttime:starttime,
+                            endtime:endtime,
+                            userid:getCookie('id'),
+                            password:getCookie('password'),
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                            }
+                            else
+                            {
+                                $(".business-list-info").html('');
+                                if(result.code==0){
+                                    info = result.data;
+                                    divpage = parseInt(Math.ceil(info.length/5));
+                                    showPage(divpage);
+                                    var reallength = info.length-1;
+                                    for(i = reallength-5*(curpage);i<reallength-5*(curpage-1);i++){
+                                        if(info[i] != null){
+                                            showLine(info[i]);
+                                        }
+                                    }
+                                }else{
+                                    
+                                    //alert("莫得项目");
+                                }
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })  
+                });
+                $('#search-btn').click();
+            });
+            
+            $('#lastpage').click(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+                lastpage = curpage-1;
+                if(lastpage<=0)
+                    lastpage = 1;
+                $("#lastpage").attr("href","./infocenter.html?page="+lastpage); 
+            })
+
+            
+            $('#nextpage').click(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+                nextpage = +curpage+1;
+                if(nextpage>divpage)
+                    nextpage=divpage;
+                $("#nextpage").attr("href","./infocenter.html?page="+nextpage); 
+            })
+
             function getCookie(id) {
                 var strCookie = document.cookie;
                 var arrCookie = strCookie.split("; ");
@@ -79,44 +305,16 @@
 
             var islogin = getCookie("id");
             if(islogin!==''){
+                $id = islogin;
+                showUser($id);
+                $("#loginbf").hide();
                 $("#loginaf").show();
             }else{
-                location.href = "./login.html"
+                $("#loginbf").show();
+                $("#loginaf").hide();
             }
-
-            $.ajax({
-                url:'../backend/index.php',
-                type:'post',
-                dataType:'json',
-                data:{
-                    userid:getCookie('id'),
-                    password:getCookie('password'),
-                },
-                success:function(result){
-                    if(result.status == false){
-                        alert('出错了');
-                    }
-                    else
-                    {
-                        if(result.code=='0'){
-                            info = result.data;
-                            for(i =0;i<info.length;i++){
-                                if(info[i] != null){
-                                    showLine(info[i]);
-                                }
-                            }
-                        }else{
-                            alert("还没有申请项目哦");
-                            //location.href = "./index.html";
-                        }
-
-                    }
-                },
-                error:function(){
-                    alert('出错了~~');
-                }
-            })
         </script>
+
     </body>
 </html>
 

@@ -34,6 +34,10 @@ if($endtime=='*'){
 $que = "SELECT businessid,businessname,starttime,endtime FROM `business` WHERE businessid like '$businessid' AND businessname like '$businessname' AND starttime>'$starttime' AND endtime<'$endtime' limit 50";
 if(isset($_POST['userid'])&&isset($_POST['password']))
 {
+    function sha256($str = ''){
+        return hash("sha256", $str);
+    }
+
     $userid = $_POST['userid'];
     $password = $_POST['password'];
 
@@ -65,11 +69,7 @@ if(empty($result)){
     die();
 }
 
-// $page = 0;
-// if(isset($_POST['page']))
-//     $page = $_POST['page'];
 
-// $result = array_slice($result,6*$page,6*($page+1));
 echo json_encode(array('status'=>true,'code'=>0,'data'=>$result));
 
 
