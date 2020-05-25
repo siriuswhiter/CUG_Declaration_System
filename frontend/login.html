@@ -84,8 +84,8 @@
                                 location.href="./index.html";
                                 var exp = new Date();
                                 exp.setTime(exp.getTime() + 60 ); 
-                                document.cookie = "id=" + $id + ";expires=" + exp.toGMTString();
-                                document.cookie = "password=" + $password + ";expires=" + exp.toGMTString();
+                                document.cookie = "id=" + $id + ";SameSite=Lax;expires=" + exp.toGMTString();
+                                document.cookie = "password=" + $password + ";SameSite=Lax;expires=" + exp.toGMTString();
                             }
                         },
                         error:function(){
