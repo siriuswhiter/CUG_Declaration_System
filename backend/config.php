@@ -90,7 +90,7 @@ function create_tb_apply($mysqli){
  */
 function create_tb_approval($mysqli){
     $que = "CREATE TABLE IF NOT EXISTS approval(
-        applyid BIGINT(32) PRIMARY KEY AUTO_INCREMENT   ,
+        applyid BIGINT(32) PRIMARY KEY ,
         approverid BIGINT(32) NOT NULL,
         ispass INT NOT NULL,
         approvertime DATETIME NOT NULL,

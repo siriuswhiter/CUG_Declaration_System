@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>业务列表浏览</title>
+    <title>待审批业务浏览</title>
 </head>
 <body>
 <?php if(is_array($result)&&count($result)>0):?>
@@ -42,7 +42,7 @@
             <?php echo $val['businessid'];?>
             </td>
             <td>
-            <a href="businessViewDetail.php?no=<?php echo $val['businessid'] ?>"><?php echo $val['businessname'];?></a>
+            <a href="applyViewDetail.php?no=<?php echo $val['businessid'] ?>"><?php echo $val['businessname'];?></a>
             </td>
             <td>
             <?php echo  substr($val['starttime'],0,10) ;?>
