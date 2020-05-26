@@ -4,7 +4,7 @@ header('Content-Type:text/json;charset=utf-8');
 
 
 $id = $_POST['id'];
-$username = $_POST['username'];
+$username = $_POST['name'];
 $password = $_POST['password'];
 
 function checkid($id){
@@ -40,7 +40,7 @@ if(!empty(query($que))) {
 $salt = md5(time());
 $password = sha256($password.$salt);
 
-$que = "INSERT INTO users (userid,username,salt,password,role)value('$id','$username','$salt','$password','0')";
+$que = "INSERT INTO users (userid,username,salt,password,role)value('$id','$username','$salt','$password','1')";
 
 if(execute($que)==false){
     echo json_encode(array('status'=>false,'code'=>1));

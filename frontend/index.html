@@ -50,6 +50,7 @@
 
         </div>
         <script>
+            console.log(document.cookie);
             function showUser(id){
                 $("#welcome").html(id);
             }
@@ -71,75 +72,13 @@
             function showPage(divpage){
                 for(i =divpage;i>=1;i--){
                     var a = $("<a></a>");
-                    html = '<a href="./index.html?page='+i+'">'+i+'</a>';
+                    html = '<a class="page" href="./index.html?page='+i+'">'+i+'</a>';
                     a.html(html);
                     $("#lastpage").after(a);
                 }
             }
         
-            var divpage;
-            $(function(){
-                var curpage = 1;
-                var url = location.search;
-                if(url!="" && url!=null){
-                    curpage = url.split("=")[1];
-                }
-
-                var businessid="*",businessname="*",starttime="*",endtime="*";
-                $('#search-btn').click(function(){
-                    businessid = document.getElementById("input-id").value;
-                    if(businessid=='' || businessid==null)
-                        businessid = "*";
-                    businessname = document.getElementById("input-name").value;
-                    if(businessname=='' || businessname==null)
-                        businessname = "*";
-                    starttime = document.getElementById("input-starttime").value;
-                    if(starttime=='' || starttime==null)
-                        starttime = "*";
-                    endtime = document.getElementById("input-endtime").value;
-                    if(endtime=='' || endtime==null)
-                        endtime = "*";
-
-                    $.ajax({
-                        url:'../backend/index.php',
-                        type:'post',
-                        dataType:'json',
-                        data:{
-                            businessid:businessid,
-                            businessname:businessname,
-                            starttime:starttime,
-                            endtime:endtime,
-                        },
-                        success:function(result){
-                            if(result.status == false){
-                                alert('出错了~~');
-                            }
-                            else
-                            {
-                                $(".business-list").html('');
-                                if(result.code==0){
-                                    info = result.data;
-                                    divpage = parseInt(Math.ceil(info.length/6));
-                                    showPage(divpage);
-                                    var reallength = info.length-1;
-                                    for(i = reallength-6*(curpage);i<reallength-6*(curpage-1);i++){
-                                        if(info[i] != null){
-                                            showLine(info[i]);
-                                        }
-                                    }
-                                }else{
-                                    alert("莫得项目");
-                                }
-                            }
-                        },
-                        error:function(){
-                            alert('出错了~~');
-                        }
-                    })  
-                });
-                $('#search-btn').click();
-            });
-            
+                   
             $('#lastpage').click(function(){
                 var curpage = 1;
                 var url = location.search;
@@ -176,14 +115,13 @@
                 return "";
             }
 
-            function exitLogin() {
+
+
+            $('#logout').click(function(){
+                document.cookie = "";
                 document.cookie = "id=";
                 document.cookie = "password=";
                 window.location.reload(true);
-            }
-
-            $('#logout').click(function(){
-                exitLogin();
             })
 
             var islogin = getCookie("id");
@@ -196,6 +134,70 @@
                 $("#loginbf").show();
                 $("#loginaf").hide();
             }
+
+            var divpage;
+            $(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+
+                $('#search-btn').click(function(){
+                    businessid = document.getElementById("input-id").value;
+                    if(businessid=='' || businessid==null)
+                        businessid = "*";
+                    businessname = document.getElementById("input-name").value;
+                    if(businessname=='' || businessname==null)
+                        businessname = "*";
+                    starttime = document.getElementById("input-starttime").value;
+                    if(starttime=='' || starttime==null)
+                        starttime = "*";
+                    endtime = document.getElementById("input-endtime").value;
+                    if(endtime=='' || endtime==null)
+                        endtime = "*";
+                    
+                    $.ajax({
+                        url:'../backend/index.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            businessid:businessid,
+                            businessname:businessname,
+                            starttime:starttime,
+                            endtime:endtime,
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                            }
+                            else
+                            {
+                                $(".business-list").html('');
+                                if(result.code==0){
+                                    $(".page").parent('a').remove();
+                                    info = result.data;
+                                    divpage = parseInt(Math.ceil(info.length/6));
+                                    showPage(divpage);
+                                    var reallength = info.length-1;
+                                    for(i = reallength-6*(curpage);i<reallength-6*(curpage-1);i++){
+                                        if(info[i] != null){
+                                            showLine(info[i]);
+                                        }
+                                    }
+                                }else{
+                                    alert("莫得项目");
+                                }
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })  
+                });
+                $('#search-btn').click();
+            });
+ 
         </script>
     </body>
 </html>

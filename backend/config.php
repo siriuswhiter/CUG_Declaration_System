@@ -100,6 +100,17 @@ function create_tb_approval($mysqli){
     $mysqli->query($que);
 }
 
+function create_user_admin($mysqli){
+    $userid = "20160000000";
+    $username = "admin";
+    $password = "admin";
+    $salt = md5(time());
+    $password = hash("sha256",$password.$salt);
+    $role = 7;
+
+    $que = "INSERT INTO users(userid,username,password,salt,role) VALUE ('$userid', '$username', '$password', '$salt','$role')";
+    $mysqli->query($que);
+}
 
 function init(){
     create_db();
@@ -108,8 +119,12 @@ function init(){
     create_tb_business($mysqli);
     create_tb_apply($mysqli);
     create_tb_approval($mysqli);
+
+    create_user_admin($mysqli);
     $mysqli->close();
 }
+
+
 
 init();
 ?>
