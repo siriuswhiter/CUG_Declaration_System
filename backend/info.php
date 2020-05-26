@@ -4,6 +4,7 @@ require_once "database.php";
 header('Content-Type:text/json;charset=utf-8');
 
 
+
 $mysqli = get_db();
 $userid = $_POST['userid'];
 $password = $_POST['password'];
@@ -41,6 +42,27 @@ $store_password = $result[0]['password'];
 $password = sha256($password.$salt);
 
 if($store_password==$password){
+    if(isset($_POST['operat']) && $_POST['operat']=='1')
+    {
+        $userid = $_POST['userid'];
+        $username = $_POST['username'];
+        $sex = $_POST['sex'];
+        $academy = $_POST['academy'];
+        $class = $_POST['class'];
+
+        if($sex=='女'){
+            $sex = 0;
+        }else if($sex=='男'){
+            $sex = 1;
+        }
+
+        $que = "UPDATE users SET username='$username',sex='$sex',academy='$academy',class='$class' WHERE userid = '$userid'";
+        $result = execute($que);
+        if(!$result){
+            echo json_encode(array('status'=>false,'code'=>1));
+            die();
+        }
+    }
     $que = "SELECT username,sex,academy,class,role FROM users WHERE userid='$userid'";
     $result = query($que)[0];
     if(!empty($result)){

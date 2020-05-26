@@ -15,6 +15,8 @@
     {
         date_default_timezone_set('PRC');
         $selectinfo= $_POST['ziduan'];
+        //（cookie里面有）cookie['id']，这个页面加个登陆验证，没有登录的话跳转到登录页面../frontend/login.html
+
         $businessid=$_POST['no'];##userid 号咋读取还没写。
 
         $custominfo=serialize(array_slice($_POST,0,count($_POST)-2));

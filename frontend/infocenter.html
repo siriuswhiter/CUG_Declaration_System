@@ -65,12 +65,71 @@
                         <li><a>性别</a><input type="text" id="sex"></li>
                         <li><a>学院</a><input type="text" id="academy"></li>
                         <li><a>班级</a><input type="text" id="class"></li>
+                        <input type="button" id="submit" value="更改"/>
                     </div>
                 </div>
             </div>
 
         </div>
         <script>
+            $("#submit").click(function() {
+                console.log('click');
+                username = $("#username").val();
+                sex = $("#sex").val();
+                academy = $("#academy").val();
+                cla = $("#class").val();
+                $.ajax({
+                        url:'../backend/info.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            operat:'1',
+                            userid:userid,
+                            username:username,
+                            sex:sex,
+                            academy:academy,
+                            class:cla,
+                            password:password,
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                                location.href = "./index.html";
+                            }
+                            else
+                            {
+                                if(result.code==0){
+                                    info = result.data;
+                                    $("#userid").attr("value",getCookie('id'));
+                                    $("#userid").attr("disabled","disabled");
+                                    $("#username").attr("value",info['username']);
+                                    if(info['sex']!=null){
+                                        if(info['sex']==0)
+                                            $("#sex").attr("value","女");
+                                        else if(info['sex']==1)
+                                            $("#sex").attr("value","男");
+                                        else
+                                            $("#sex").attr("value","未知");
+                                    }
+
+                                    if(info['academy']!=null){
+                                        $("#academy").attr("value",info['academy']);
+                                    }
+                                    if(info['class']!=null){
+                                        $("#class").attr("value",info['class']);
+                                    }
+                                    alert('更改成功');
+                                }
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                            location.href = "./index.html";
+                        }
+                    })  
+
+            })
+
             $("#info").click(function() {
                 window.location.hash = '#info';
                 $("#business-list-info").hide();
@@ -112,6 +171,59 @@
             })
 
 
+ 
+            
+            $(function() {
+                $("#applied").hide();
+                $("#approval").hide();
+                $("usermanage").hide();
+                $("#info").click();
+                if(window.location.hash =='#info'){
+                    $("#info").click();
+                }else if(window.location.hash =='#applied'){
+                    $("#applied").click();
+                }else if(window.location.hash=='approval'){
+                    $("#approval").click();
+                }else if(window.location.hash=='usermanage'){
+                    $("#usermanage").click();
+                }
+            })
+
+            function showUser(id){
+                $("#welcome").html(id);
+            }
+
+
+            function showLine(info){
+                var div = $("<div></div>");
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
+                if(Date.now() < Date.parse(info.endtime)){
+                    html += '<span style="color:green">未过期</span></p></div></div>';
+                }else{
+                    html += '<span style="color:red">已过期</span></p></div></div>'
+                }
+                div.html(html);
+                $("#business-list-info").prepend(div);
+            }
+
+            function showInfo(info){
+                var div = $("<div></div>");
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看信息"  style="cursor: pointer; color:white" href="../backend/userViewDetail.php?no='+info.userid+'">'+info.userid+'</a></p></div><div class="bodyBox"><p>用户名：'+info.username+'</p><p>学院：'+info.academy+'</p></div>';
+                div.html(html);
+                $("#user-list-info").prepend(div);
+            }
+
+
+            function showPage(divpage){
+                for(i =divpage;i>=1;i--){
+                    var a = $("<a></a>");
+                    Anchor = window.location.hash;
+                    html = '<a href="./infocenter.html?'+Anchor+'page='+i+'">'+i+'</a>';
+                    a.html(html);
+                    $("#lastpage").after(a);
+                }
+            }
+        
             $(function() {
                 userid = getCookie('id');
                 password = getCookie('password');
@@ -125,6 +237,7 @@
                         type:'post',
                         dataType:'json',
                         data:{
+                            operat:'0',
                             userid:userid,
                             password:password,
                         },
@@ -178,59 +291,6 @@
                     })  
             })
       
-            
-            $(function() {
-                $("#applied").hide();
-                $("#approval").hide();
-                $("usermanage").hide();
-                $("#info").click();
-                if(window.location.hash =='#info'){
-                    $("#info").click();
-                }else if(window.location.hash =='#applied'){
-                    $("#applied").click();
-                }else if(window.location.hash=='approval'){
-                    $("#approval").click();
-                }else if(window.location.hash=='usermanage'){
-                    $("#usermanage").click();
-                }
-            })
-
-            function showUser(id){
-                $("#welcome").html(id);
-            }
-
-
-            function showLine(info){
-                var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
-                if(Date.now() < Date.parse(info.endtime)){
-                    html += '<span style="color:green">未过期</span></p></div></div>';
-                }else{
-                    html += '<span style="color:red">已过期</span></p></div></div>'
-                }
-                div.html(html);
-                $("#business-list-info").prepend(div);
-            }
-
-            function showInfo(info){
-                console.log("num 1");
-                var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看信息"  style="cursor: pointer; color:white" href="../backend/userViewDetail.php?no='+info.userid+'">'+info.userid+'</a></p></div><div class="bodyBox"><p>用户名：'+info.username+'</p></div>';
-                div.html(html);
-                $("#user-list-info").prepend(div);
-            }
-
-
-            function showPage(divpage){
-                for(i =divpage;i>=1;i--){
-                    var a = $("<a></a>");
-                    Anchor = window.location.hash;
-                    html = '<a href="./infocenter.html?'+Anchor+'page='+i+'">'+i+'</a>';
-                    a.html(html);
-                    $("#lastpage").after(a);
-                }
-            }
-        
             var divpage;
             $(function(){
                 var curpage = 1;
@@ -282,7 +342,7 @@
                                     var reallength = info.length-1;
                                     for(i = reallength-5*(curpage);i<reallength-5*(curpage-1);i++){
                                         if(info[i] != null){
-                                            showInfo(info[i]);
+                                            showLine(info[i]);
                                         }
                                     }
                                 }
@@ -311,8 +371,6 @@
                     username = document.getElementById("input-username").value;
                     if(username=='' || username==null)
                         username = "*";
-
-                    console.log("btnbtn");
 
                     $.ajax({
                         url:'../backend/usermanage.php',

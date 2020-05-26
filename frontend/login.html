@@ -57,6 +57,28 @@
             }).show();  
         };
 
+        var cookie={
+            getAll:function(){
+                var obj={};
+                var arr=document.cookie.split('; ');
+                for(var i=0;i<arr.length;i++){
+                    obj[arr[i].split('=')[0]]=arr[i].split('=')[1];
+                }
+                return obj;
+            },
+            get:function(key){
+                return this.getAll()[key];
+            },
+            set:function(key,value,time){
+                //var date=new Date().getTime()+time*1000;
+                document.cookie=key+'='+value;//+';expires='+new Date(date).toUTCString();
+            },
+            remove:function(key){
+                var date=new Date().getTime()-1;
+                document.cookie=key+'=;expires='+new Date(date).toUTCString();
+            }
+        };
+
         $(function(){
             $(".onbutton #onsubmit").on('click',function(){
                 var $id = $("#id").val(),
@@ -80,12 +102,11 @@
                             }
                             else
                             {
-                                window.setTimeout(showTips('登录成功，正在跳转至主页...'),300);
-                                location.href="./index.html";
-                                var exp = new Date();
-                                exp.setTime(exp.getTime() + 60 ); 
-                                document.cookie = "id=" + $id + ";SameSite=Lax;expires=" + exp.toGMTString();
-                                document.cookie = "password=" + $password + ";SameSite=Lax;expires=" + exp.toGMTString();
+                                cookie.set('id',$id,2);
+                                cookie.set('password',$password,2);
+                                //window.setTimeout(showTips('登录成功，正在跳转至主页...'),300);
+                                //location.href="./index.html";
+                                console.log(document.cookie);
                             }
                         },
                         error:function(){

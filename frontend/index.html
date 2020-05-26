@@ -117,14 +117,36 @@
 
 
 
+
+
+            var cookie={
+                getAll:function(){
+                    var obj={};
+                    var arr=document.cookie.split('; ');
+                    for(var i=0;i<arr.length;i++){
+                        obj[arr[i].split('=')[0]]=arr[i].split('=')[1];
+                    }
+                    return obj;
+                },
+                get:function(key){
+                    return this.getAll()[key];
+                },
+                set:function(key,value,time){
+                    var date=new Date().getTime()+time*1000;
+                    document.cookie=key+'='+value+';expires='+new Date(date).toUTCString();
+                },
+                remove:function(key){
+                    var date=new Date().getTime()-1;
+                    document.cookie=key+'=;expires='+new Date(date).toUTCString();
+                }
+            };
+
             $('#logout').click(function(){
-                document.cookie = "";
-                document.cookie = "id=";
-                document.cookie = "password=";
+                cookie.remove('id');
                 window.location.reload(true);
             })
 
-            var islogin = getCookie("id");
+            var islogin = cookie.get("id");
             if(islogin!==''){
                 $id = islogin;
                 showUser($id);
