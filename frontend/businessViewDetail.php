@@ -1,5 +1,5 @@
 <?php
-    require_once 'database.php';
+    require_once '../backend/database.php';
     $no=$_GET['no'];
     $sql="select * from business where businessid='$no' limit 1;";
     $result=query($sql)[0];
@@ -17,18 +17,24 @@
         $selectinfo= $_POST['ziduan'];
         //（cookie里面有）cookie['id']，这个页面加个登陆验证，没有登录的话跳转到登录页面../frontend/login.html
 
-        $businessid=$_POST['no'];##userid 号咋读取还没写。
+        // cookie验证
+        if(!isset($_COOKIE['id'])||$_COOKIE['id']==''){
+            // 弹窗出不来 不太会弹。。
+            echo"<script>alert('还未登录，请先登录...')</script>";
+            header('Location:../frontend/login.html');
+        }
+        $userid = $_COOKIE['id'];
+        $businessid=$no;##userid 号咋读取还没写。
 
         $custominfo=serialize(array_slice($_POST,0,count($_POST)-2));
-        $userid=9999;
 
         $sql="INSERT INTO `apply` (`applyid`, `businessid`, `userid`, `selectinfo`, `custominfo`, `submittime`) VALUES (NULL, $businessid, $userid, '$selectinfo', '$custominfo', CURDATE());";
-        echo $sql;
         if(execute($sql)==false){
             echo 'insert wrong!';
             die();
         }
-        echo '跳转到哪，我也不知道。';
+        //想要个弹窗申请成功
+        header('Location:../index.php');
     }
 ?>
 

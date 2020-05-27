@@ -58,7 +58,7 @@
 
             function showLine(info){
                 var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
                 if(Date.now() < Date.parse(info.endtime)){
                     html += '<span style="color:green">未过期</span></p></div></div>';
                 }else{
