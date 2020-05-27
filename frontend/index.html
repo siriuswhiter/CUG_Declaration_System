@@ -50,10 +50,7 @@
 
         </div>
         <script>
-            console.log(document.cookie);
-            function showUser(id){
-                $("#welcome").html(id);
-            }
+
 
 
             function showLine(info){
@@ -104,19 +101,11 @@
                 $("#nextpage").attr("href","./index.html?page="+nextpage); 
             })
 
-            function getCookie(id) {
-                var strCookie = document.cookie;
-                var arrCookie = strCookie.split("; ");
-                for (var i = 0; i < arrCookie.length; i++) {
-                    var arr = arrCookie[i].split("=");
-                    if (arr[0] == id)
-                        return arr[1];
-                }
-                return "";
+
+
+            function showUser(id){
+                $("#welcome").html(id);
             }
-
-
-
 
 
             var cookie={

@@ -176,7 +176,7 @@
             $(function() {
                 $("#applied").hide();
                 $("#approval").hide();
-                $("usermanage").hide();
+                $("#usermanage").hide();
                 $("#info").click();
                 if(window.location.hash =='#info'){
                     $("#info").click();
@@ -196,7 +196,7 @@
 
             function showLine(info){
                 var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="../backend/businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="businessViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p><p>是否过期：';
                 if(Date.now() < Date.parse(info.endtime)){
                     html += '<span style="color:green">未过期</span></p></div></div>';
                 }else{
@@ -208,7 +208,7 @@
 
             function showInfo(info){
                 var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看信息"  style="cursor: pointer; color:white" href="../backend/userViewDetail.php?no='+info.userid+'">'+info.userid+'</a></p></div><div class="bodyBox"><p>用户名：'+info.username+'</p><p>学院：'+info.academy+'</p></div>';
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看信息"  style="cursor: pointer; color:white" href="userViewDetail.php?no='+info.userid+'">'+info.userid+'</a></p></div><div class="bodyBox"><p>用户名：'+info.username+'</p><p>学院：'+info.academy+'</p></div>';
                 div.html(html);
                 $("#user-list-info").prepend(div);
             }
@@ -224,6 +224,7 @@
                 }
             }
         
+            var role;
             $(function() {
                 userid = getCookie('id');
                 password = getCookie('password');
@@ -268,6 +269,7 @@
                                     if(info['class']!=null){
                                         $("#class").attr("value",info['class']);
                                     }
+                                    role = info['role'];
                                     //申请权限
                                     if(info['role']%2==1){
                                         $("#applied").show();
@@ -410,6 +412,7 @@
                 });
                 $('#search-btn-2').click();
             });
+
             
 
             

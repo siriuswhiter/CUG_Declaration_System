@@ -28,9 +28,9 @@ $password = sha256($password.$salt);
 
 
 if($store_password==$password && $result[0]['role']>=4){
-    $que = "SELECT userid,username FROM `users` limit 50";
+    $que = "SELECT userid,username,academy FROM `users` limit 50";
 }else{
-    echo json_encode(array('status'=>false,'code'=>1));
+    echo json_encode(array('status'=>true,'code'=>1));
     die();
 }
 
