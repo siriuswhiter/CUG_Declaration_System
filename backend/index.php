@@ -55,7 +55,7 @@ if(isset($_POST['userid'])&&isset($_POST['password']))
     $password = sha256($password.$salt);
 
     if($store_password==$password){
-        $que = "SELECT businessid,businessname,starttime,endtime FROM `apply` NATURAL JOIN `business` WHERE userid = '$userid' limit 50";
+        $que = "SELECT businessid,businessname,starttime,endtime FROM `apply` NATURAL JOIN `business` WHERE userid = '$userid' AND businessid like '$businessid' AND businessname like '$businessname' AND starttime>'$starttime' AND endtime<'$endtime' limit 50";
     }else{
         echo json_encode(array('status'=>false,'code'=>1));
         die();

@@ -102,8 +102,7 @@
             })
 
 
-
-            function showUser(id){
+            function showUser(id){  
                 $("#welcome").html(id);
             }
 
@@ -129,6 +128,7 @@
                     document.cookie=key+'=;expires='+new Date(date).toUTCString();
                 }
             };
+
 
             $('#logout').click(function(){
                 cookie.remove('id');

@@ -49,10 +49,19 @@
                         <a><label>姓名：</label><input type="text" id="input-username" name="input-name" placeholder="用户名"></a>
                         <a><input type="button" id="search-btn-2" value="搜索"></a>
                     </div>
+                    <div class="choice-list-info" id="choice-list-info-3">                 
+                        <a><label>申请编号：</label><input type="text" id="input-applyid" name="input-id" placeholder="申请编号"></a>
+                        <a><label>申请项目：</label><input type="text" id="input-applyname" name="input-name" placeholder="申请项目"></a>
+                        <a><label>申请人：</label><input type="text" id="input-applyman" name="input-man" placeholder="申请人"/></a>
+                        <a><input type="button" id="search-btn-3" value="搜索"></a>
+                    </div>
                     <div class="business-list-info" id="business-list-info">
 
                     </div>
                     <div class="business-list-info" id="user-list-info">
+                    </div>
+                    <div class="business-list-info" id="apply-list-info">
+
                     </div>
                 
                     <div id="pageBox">
@@ -132,19 +141,24 @@
 
             $("#info").click(function() {
                 window.location.hash = '#info';
-                $("#business-list-info").hide();
+                $("#business-list-info").hide();    
                 $("#user-list-info").hide();
+                $("#apply-list-info").hide();
                 $("#choice-list-info-1").hide();
                 $("#choice-list-info-2").hide();
+                $("#choice-list-info-3").hide();
                 $("#pageBox").hide();
                 $(".info-list").show();
             })
 
             $("#applied").click(function() {
                 window.location.hash = '#applied';
+                console.log(window.location.hash);
                 $(".info-list").hide();
+                $("#apply-list-info").hide();
                 $("#user-list-info").hide();
                 $("#business-list-info").show();
+                $("#choice-list-info-3").hide();
                 $("#choice-list-info-2").hide();
                 $("#choice-list-info-1").show();
                 $("#pageBox").show();
@@ -152,22 +166,24 @@
             $("#approval").click(function() {
                 window.location.hash = '#approval';
                 $(".info-list").hide();
+                $("#apply-list-info").show();
                 $("#user-list-info").hide();
-                $("#business-list-info").show();
+                $("#business-list-info").hide();
+                $("#choice-list-info-3").show();
                 $("#choice-list-info-2").hide();
-                $("#choice-list-info-1").show();
+                $("#choice-list-info-1").hide();
                 $("#pageBox").show();
             })
             $("#usermanage").click(function() {
                 window.location.hash = '#usermanage';
                 $(".info-list").hide();
+                $("#apply-list-info").hide();
                 $("#user-list-info").show();
                 $("#business-list-info").hide();
+                $("#choice-list-info-3").hide();
                 $("#choice-list-info-2").show();
                 $("#choice-list-info-1").hide();
                 $("#pageBox").show();
-
-
             })
 
 
@@ -177,15 +193,18 @@
                 $("#applied").hide();
                 $("#approval").hide();
                 $("#usermanage").hide();
-                $("#info").click();
-                if(window.location.hash =='#info'){
+                
+                location_hash = window.location.hash.split('?')[0];
+                if(location_hash =='#info'){
                     $("#info").click();
-                }else if(window.location.hash =='#applied'){
+                }else if(location_hash =='#applied'){
                     $("#applied").click();
-                }else if(window.location.hash=='approval'){
+                }else if(location_hash=='#approval'){
                     $("#approval").click();
-                }else if(window.location.hash=='usermanage'){
+                }else if(location_hash=='#usermanage'){
                     $("#usermanage").click();
+                }else{
+                    $("#info").click();
                 }
             })
 
@@ -213,18 +232,26 @@
                 $("#user-list-info").prepend(div);
             }
 
+            function showApply(info){
+                var div = $("<div></div>");
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p>申请编号：<a title="查看信息"  style="cursor: pointer; color:white" href="applyViewDetail.php?no='+info.applyid+'">'+info.applyid+'</a></p></div><div class="bodyBox"><p>申请项目：'+info.businessid+'</p><p>申请人：'+info.userid+'</p></div>';
+                div.html(html);
+                $("#apply-list-info").prepend(div);
+            }
 
             function showPage(divpage){
+                $(".page").parent('a').remove();
                 for(i =divpage;i>=1;i--){
+                    location_hash = window.location.hash.split('?')[0];
+                    Anchor = location_hash;
                     var a = $("<a></a>");
-                    Anchor = window.location.hash;
-                    html = '<a href="./infocenter.html?'+Anchor+'page='+i+'">'+i+'</a>';
+                    html = '<a class="page" href="./infocenter.html'+Anchor+'?page='+i+'">'+i+'</a>';
                     a.html(html);
                     $("#lastpage").after(a);
                 }
             }
         
-            var role;
+
             $(function() {
                 userid = getCookie('id');
                 password = getCookie('password');
@@ -282,6 +309,9 @@
                                     //管理权限
                                     if((info['role']>>2)%2==1){
                                         $("#usermanage").show();
+                                        var li = $("<li></li>");
+                                        li.html('<li><a id="businessgen" style="cursor: pointer;" href="./businessGen.html">新建项目</a></li>');
+                                        $("#usermanage").after(li);
                                     }
                                 }
                             }
@@ -303,6 +333,7 @@
 
                 var businessid="*",businessname="*",starttime="*",endtime="*";
                 $('#search-btn').click(function(){
+                    console.log('click');
                     businessid = document.getElementById("input-id").value;
                     if(businessid=='' || businessid==null)
                         businessid = "*";
@@ -315,8 +346,9 @@
                     endtime = document.getElementById("input-endtime").value;
                     if(endtime=='' || endtime==null)
                         endtime = "*";
-
-                    Anchor = window.location.hash;
+                    
+                    location_hash = window.location.hash.split('?')[0];
+                    Anchor = location_hash;
 
                     $.ajax({
                         url:'../backend/index.php',
@@ -338,11 +370,12 @@
                             {
                                 $("#business-list-info").html('');
                                 if(result.code==0){
+                                    $(".page").parent('a').remove();
                                     info = result.data;
                                     divpage = parseInt(Math.ceil(info.length/5));
                                     showPage(divpage);
                                     var reallength = info.length-1;
-                                    for(i = reallength-5*(curpage);i<reallength-5*(curpage-1);i++){
+                                    for(i = reallength-4*(curpage);i<reallength-4*(curpage-1);i++){
                                         if(info[i] != null){
                                             showLine(info[i]);
                                         }
@@ -358,6 +391,69 @@
                 $('#search-btn').click();
             });
             
+
+            $(function(){
+                var curpage = 1;
+                var url = location.search;
+                if(url!="" && url!=null){
+                    curpage = url.split("=")[1];
+                }
+
+                var applyid="*",applyname="*",applyman="*";
+                $('#search-btn-3').click(function(){
+                    applyid = document.getElementById("input-applyid").value;
+                    if(applyid=='' || applyid==null)
+                        applyid = "*";
+                    businessid = document.getElementById("input-applyname").value;
+                    if(businessid=='' || businessid==null)
+                        businessid = "*";
+                    id = document.getElementById("input-applyman").value;
+                    if(id=='' || id==null)
+                        id = "*";
+ 
+                    location_hash = window.location.hash.split('?')[0];
+                    Anchor = location_hash;
+
+                    $.ajax({
+                        url:'../backend/apply.php',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            applyid:applyid,
+                            businessid:businessid,
+                            id:id,
+                            userid:getCookie('id'),
+                            password:getCookie('password'),
+                        },
+                        success:function(result){
+                            if(result.status == false){
+                                alert('出错了~~');
+                            }
+                            else
+                            {
+                                $("#apply-list-info").html('');
+                                if(result.code==0){
+                                    info = result.data;
+                                    divpage = parseInt(Math.ceil(info.length/5));
+                                    showPage(divpage);
+                                    var reallength = info.length-1;
+                                    for(i = reallength-4*(curpage);i<reallength-4*(curpage-1);i++){
+                                        if(info[i] != null){
+                                            showApply(info[i]);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        error:function(){
+                            alert('出错了~~');
+                        }
+                    })  
+                });
+                $('#search-btn-3').click();
+            });
+
+
             $(function(){
                 var curpage = 1;
                 var url = location.search;
@@ -397,8 +493,8 @@
                                     divpage = parseInt(Math.ceil(info.length/5));
                                     showPage(divpage);
                                     var reallength = info.length-1;
-                                    for(i = 0;i<reallength;i++) {
-                                        if(info[i]!=null){
+                                    for(i = reallength-4*(curpage);i<reallength-4*(curpage-1);i++){
+                                        if(info[i] != null){
                                             showInfo(info[i]);
                                         }
                                     }
@@ -425,7 +521,8 @@
                 lastpage = curpage-1;
                 if(lastpage<=0)
                     lastpage = 1;
-                Anchor = window.location.hash;
+                location_hash = window.location.hash.split('?')[0];
+                Anchor = location_hash;
                 $("#lastpage").attr("href","./infocenter.html"+Anchor+"?page="+lastpage); 
             })
 
@@ -439,9 +536,11 @@
                 nextpage = +curpage+1;
                 if(nextpage>divpage)
                     nextpage=divpage;
-                Anchor = window.location.hash;
+                location_hash = window.location.hash.split('?')[0];
+                Anchor = location_hash;
                 $("#nextpage").attr("href","./infocenter.html"+Anchor+"?page="+nextpage); 
             })
+
 
             function getCookie(id) {
                 var strCookie = document.cookie;
