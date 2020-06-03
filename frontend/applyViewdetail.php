@@ -1,5 +1,13 @@
 <?php
     require_once '../backend/database.php';
+
+    // cookie验证
+    if(!isset($_COOKIE['id'])||$_COOKIE['id']==''){
+        // 弹窗出不来 不太会弹。。
+        echo"<script>alert('还未登录，请先登录...')</script>";
+        header('Location:./login.html');
+    }
+
     $no=$_GET['no'];
     $sql="select * from apply where businessid='$no' and applyid not in (select applyid from approval where ispass !=0);";
     $result=query($sql);

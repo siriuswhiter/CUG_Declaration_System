@@ -1,5 +1,12 @@
 <?php
     require_once '../backend/database.php';
+    // cookie验证
+    if(!isset($_COOKIE['id'])||$_COOKIE['id']==''){
+        // 弹窗出不来 不太会弹。。
+        echo"<script>alert('还未登录，请先登录...')</script>";
+        header('Location:./login.html');
+    }
+
     $no=$_GET['no'];
     $sql="select * from business where businessid='$no' limit 1;";
     $result=query($sql)[0];
@@ -17,14 +24,12 @@
         $selectinfo= $_POST['ziduan'];
         //（cookie里面有）cookie['id']，这个页面加个登陆验证，没有登录的话跳转到登录页面../frontend/login.html
 
-        // cookie验证
-        if(!isset($_COOKIE['id'])||$_COOKIE['id']==''){
-            // 弹窗出不来 不太会弹。。
-            echo"<script>alert('还未登录，请先登录...')</script>";
-            header('Location:../frontend/login.html');
-        }
+
+        // 可能需要加个如果登录了且申请过的话直接显示自己的申请信息的
+
+
         $userid = $_COOKIE['id'];
-        $businessid=$no;##userid 号咋读取还没写。
+        $businessid=$no;
 
         $custominfo=serialize(array_slice($_POST,0,count($_POST)-2));
 
@@ -33,8 +38,13 @@
             echo 'insert wrong!';
             die();
         }
+        // $sql="INSERT INTO `approval` (`applyid`, `ispass`) VALUES (NULL, 0);";
+        // if(execute($sql)==false){
+        //     echo 'insert wrongw!';
+        //     die();
+        // }
         //想要个弹窗申请成功
-        header('Location:../index.php');
+        header('Location:./index.html');
     }
 ?>
 

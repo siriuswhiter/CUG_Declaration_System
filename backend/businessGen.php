@@ -51,8 +51,7 @@ echo '<br>';
 
 $sql="INSERT INTO `business` ( `businessname`, `textstype`, `texts`, `starttime`, `endtime`, `approvelevel`, `allowret`) VALUES ( '$businessname', '$texttype', '$texts', CURDATE(), date_add(CURDATE(),interval $span day), '$approvelevel', '$allowret');";
 execute($sql);
-echo 'SQL语句：',$sql;
-header('location: businessView.php');
+header('location: ../frontend/index.html');
 
 
 

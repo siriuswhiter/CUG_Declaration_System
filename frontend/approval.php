@@ -26,15 +26,17 @@
         $userid=9999;
 
         $sql="INSERT INTO `approval` (`applyid`, `approverid`, `ispass`, `approvertime`) VALUES ('$applyid', '$userid', '$ispass', CURDATE());";
-        echo $sql;
+
         if(execute($sql)==false){
             echo 'insert wrong!';
             die();
         }
         
+        // 这边加个跳转回该业务的审批界面
+        // Header("Location:./applyViewDetail.php?no="+$no);
+
     }
-
-
+    
 ?>
 
 

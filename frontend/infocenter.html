@@ -50,9 +50,14 @@
                         <a><input type="button" id="search-btn-2" value="搜索"></a>
                     </div>
                     <div class="choice-list-info" id="choice-list-info-3">                 
-                        <a><label>申请编号：</label><input type="text" id="input-applyid" name="input-id" placeholder="申请编号"></a>
+                        <a><label>编号：</label><input type="text" id="input-id-3" name="input-id" placeholder="项目编号"></a>
+                        <a><label>名称：</label><input type="text" id="input-name-3" name="input-name" placeholder="项目名称"></a>
+                        <a><label>开始日期：</label><input type="date" id="input-starttime-3" name="input-starttime" placeholder="开始日期"/></a>
+                        <a><label>结束日期：</label><input type="date" id="input-endtime-3" name="input-endtime" placeholder="结束日期"></a>
+                        
+                        <!-- <a><label>申请编号：</label><input type="text" id="input-applyid" name="input-id" placeholder="申请编号"></a>
                         <a><label>申请项目：</label><input type="text" id="input-applyname" name="input-name" placeholder="申请项目"></a>
-                        <a><label>申请人：</label><input type="text" id="input-applyman" name="input-man" placeholder="申请人"/></a>
+                        <a><label>申请人：</label><input type="text" id="input-applyman" name="input-man" placeholder="申请人"/></a> -->
                         <a><input type="button" id="search-btn-3" value="搜索"></a>
                     </div>
                     <div class="business-list-info" id="business-list-info">
@@ -234,7 +239,7 @@
 
             function showApply(info){
                 var div = $("<div></div>");
-                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p>申请编号：<a title="查看信息"  style="cursor: pointer; color:white" href="applyViewDetail.php?no='+info.applyid+'">'+info.applyid+'</a></p></div><div class="bodyBox"><p>申请项目：'+info.businessid+'</p><p>申请人：'+info.userid+'</p></div>';
+                var html = '<div class="cardBox"><div class="headerBox" style="background-color:rgb(104, 182, 238)"><p><a title="查看详情"  style="cursor: pointer; color:white" href="applyViewDetail.php?no='+info.businessid+'">'+info.businessname+'</a></p></div><div class="bodyBox"><p>项目编号：'+info.businessid+'</p><p>开始时间：'+info.starttime+'</p><p>结束时间：'+info.endtime+'</p>';
                 div.html(html);
                 $("#apply-list-info").prepend(div);
             }
@@ -399,18 +404,32 @@
                     curpage = url.split("=")[1];
                 }
 
-                var applyid="*",applyname="*",applyman="*";
+                // var applyid="*",applyname="*",applyman="*";
+                var businessid="*",businessname="*",starttime="*",endtime="*";
                 $('#search-btn-3').click(function(){
-                    applyid = document.getElementById("input-applyid").value;
-                    if(applyid=='' || applyid==null)
-                        applyid = "*";
-                    businessid = document.getElementById("input-applyname").value;
+                    // applyid = document.getElementById("input-applyid").value;
+                    // if(applyid=='' || applyid==null)
+                    //     applyid = "*";
+                    // businessid = document.getElementById("input-applyname").value;
+                    // if(businessid=='' || businessid==null)
+                    //     businessid = "*";
+                    // id = document.getElementById("input-applyman").value;
+                    // if(id=='' || id==null)
+                    //     id = "*";
+                    
+                    
+                    businessid = document.getElementById("input-id-3").value;
                     if(businessid=='' || businessid==null)
                         businessid = "*";
-                    id = document.getElementById("input-applyman").value;
-                    if(id=='' || id==null)
-                        id = "*";
- 
+                    businessname = document.getElementById("input-name-3").value;
+                    if(businessname=='' || businessname==null)
+                        businessname = "*";
+                    starttime = document.getElementById("input-starttime-3").value;
+                    if(starttime=='' || starttime==null)
+                        starttime = "*";
+                    endtime = document.getElementById("input-endtime-3").value;
+                    if(endtime=='' || endtime==null)
+                        endtime = "*";
                     location_hash = window.location.hash.split('?')[0];
                     Anchor = location_hash;
 
@@ -419,9 +438,13 @@
                         type:'post',
                         dataType:'json',
                         data:{
-                            applyid:applyid,
+                            // applyid:applyid,
+                            // businessid:businessid,
+                            // id:id,
                             businessid:businessid,
-                            id:id,
+                            businessname:businessname,
+                            starttime:starttime,
+                            endtime:endtime,
                             userid:getCookie('id'),
                             password:getCookie('password'),
                         },
