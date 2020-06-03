@@ -70,9 +70,11 @@
             print('正在加载，请稍等...<br>一秒后自动跳转。'); 
                 }
         
+        // 这边加个跳转回该业务的审批界面
+        // Header("Location:./applyViewDetail.php?no="+$no);
+
     }
-
-
+    
 ?>
 
 
@@ -139,7 +141,7 @@
 
             $('#logout').click(function(){
                 cookie.remove('id');
-                window.location.reload(true);
+                window.location.href = "./login.html";
             })
 
             var islogin = cookie.get("id");

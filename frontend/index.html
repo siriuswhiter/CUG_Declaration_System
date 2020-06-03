@@ -136,7 +136,8 @@
             })
 
             var islogin = cookie.get("id");
-            if(islogin!==''){
+            console.log(islogin);
+            if(typeof(islogin) != "undefined" && islogin!==''){
                 $id = islogin;
                 showUser($id);
                 $("#loginbf").hide();

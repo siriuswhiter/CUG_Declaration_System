@@ -60,7 +60,7 @@
 
             $('#logout').click(function(){
                 cookie.remove('id');
-                window.location.reload(true);
+                window.location.href = "./login.html";
             })
 
             var islogin = cookie.get("id");

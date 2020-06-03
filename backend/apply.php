@@ -28,20 +28,11 @@ $password = sha256($password.$salt);
 
 
 if($store_password==$password && ($result[0]['role']>>1)%2==1){
-    $applyid = $_POST['applyid'];
+   
+    $starttime = $_POST['starttime'];
+    $endtime = $_POST['endtime'];
     $businessid = $_POST['businessid'];
-    $id = $_POST['id'];
-
-    if($id=='*'){
-        $id = '%';
-    }else{
-        $id = '%'.$id.'%';
-    }
-    if($applyid=='*'){
-        $applyid = '%';
-    }else{
-        $applyid = '%'.$applyid.'%';
-    }
+    $businessname = $_POST['businessname'];
 
     if($businessid=='*'){
         $businessid = '%';
@@ -49,7 +40,44 @@ if($store_password==$password && ($result[0]['role']>>1)%2==1){
         $businessid = '%'.$businessid.'%';
     }
 
-    $que = "SELECT applyid,businessid,userid FROM `apply` NATURAL JOIN `approval` WHERE ispass=0  AND applyid LIKE '$applyid' AND userid LIKE '$userid' AND businessid LIKE '$businessid' limit 50";
+    if($businessname=='*'){
+        $businessname = '%';
+    }else{
+        $businessname = '%'.$businessname.'%';
+    }
+
+    if($starttime=='*'){
+        $starttime = 0;
+    }
+    if($endtime=='*'){
+        $dt = new DateTime('1st January 2999');
+        $dt->add(DateInterval::createFromDateString('+1 day'));
+        $endtime = $dt->format('Y-m-d H:i:s');
+    }
+    $que = "SELECT DISTINCT businessid,businessname,starttime,endtime FROM `apply` NATURAL JOIN `business` WHERE userid = '$userid' AND businessid like '$businessid' AND businessname like '$businessname' AND starttime>'$starttime' AND endtime<'$endtime' AND businessid in (SELECT businessid FROM `apply` where  applyid NOT IN (select applyid from approval))limit 50";
+
+    // $applyid = $_POST['applyid'];
+    // $businessid = $_POST['businessid'];
+    // $id = $_POST['id'];
+
+    // if($id=='*'){
+    //     $id = '%';
+    // }else{
+    //     $id = '%'.$id.'%';
+    // }
+    // if($applyid=='*'){
+    //     $applyid = '%';
+    // }else{
+    //     $applyid = '%'.$applyid.'%';
+    // }
+
+    // if($businessid=='*'){
+    //     $businessid = '%';
+    // }else{
+    //     $businessid = '%'.$businessid.'%';
+    // }
+
+    // $que = "SELECT applyid,businessid,userid FROM `apply`  WHERE applyid LIKE '$applyid' AND userid LIKE '$userid' AND businessid LIKE '$businessid' AND applyid NOT IN (select applyid from approval) limit 50";
 
     $result = query($que);
     if(empty($result)){

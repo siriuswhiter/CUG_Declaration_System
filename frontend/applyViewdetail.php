@@ -1,5 +1,13 @@
 <?php
     require_once '../backend/database.php';
+
+    // cookie验证
+    if(!isset($_COOKIE['id'])||$_COOKIE['id']==''){
+        // 弹窗出不来 不太会弹。。
+        echo"<script>alert('还未登录，请先登录...')</script>";
+        header('Location:./login.html');
+    }
+
     $no=$_GET['no'];
     $sql="select  apply.applyid,businessid,userid,selectinfo,custominfo,ispass from apply  left join approval on apply.applyid=approval.applyid  where businessid='$no' ;";
     
@@ -94,7 +102,7 @@
 
             $('#logout').click(function(){
                 cookie.remove('id');
-                window.location.reload(true);
+                window.location.href = "./login.html";
             })
 
             var islogin = cookie.get("id");

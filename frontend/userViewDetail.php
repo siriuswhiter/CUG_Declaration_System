@@ -8,44 +8,38 @@
     }
 
     $no=$_GET['no'];
-    $sql="select * from business where businessid='$no' limit 1;";
+    $sql="select username,sex,academy,class,role from users where userid='$no' limit 1;";
     $result=query($sql)[0];
-    $canReturn=$result['allowret']?'是':'否';
-    
-    // $dengji=$result['approvelevel']-2 ?'三级':'二级';
-    $ziduan=unserialize( $result['texts']); 
-    $attri= unserialize($result['textstype']);
-    
+
+
     date_default_timezone_set('PRC');
 
-    if (isset($_POST['pubMsg']))
-    {
-        date_default_timezone_set('PRC');
-        $selectinfo= $_POST['ziduan'];
-        //（cookie里面有）cookie['id']，这个页面加个登陆验证，没有登录的话跳转到登录页面../frontend/login.html
-
-
-        // 可能需要加个如果登录了且申请过的话直接显示自己的申请信息的
-
-
-        $userid = $_COOKIE['id'];
-        $businessid=$no;
-
-        $custominfo=serialize(array_slice($_POST,0,count($_POST)-2));
-
-        $sql="INSERT INTO `apply` (`applyid`, `businessid`, `userid`, `selectinfo`, `custominfo`, `submittime`) VALUES (NULL, $businessid, $userid, '$selectinfo', '$custominfo', CURDATE());";
-        if(execute($sql)==false){
-            echo 'insert wrong!';
-            die();
+    $role = 0;
+    if(isset($_POST['editAuth'])){
+        if(isset($_POST['auth-apply'])){
+            $role |= 1;
         }
-        // $sql="INSERT INTO `approval` (`applyid`, `ispass`) VALUES (NULL, 0);";
-        // if(execute($sql)==false){
-        //     echo 'insert wrongw!';
-        //     die();
-        // }
-        //想要个弹窗申请成功
-        header('Location:infocenter.html#applied');
+        if(isset($_POST['auth-approval'])){
+            $role |= 2;
+            $manage = $_POST['manage'];
+            // 权限细节
+        }
+        if(isset($_POST['auth-admin'])){
+            $role |= 4;
+        }
+        if($role!=$result['role']){
+            $sql = "UPDATE users SET role = '$role' WHERE userid = '$no'";
+            if(execute($sql)==false){
+                echo 'insert wrong!';
+                die();
+            }
+            header('location: '.$_SERVER['HTTP_REFERER']);
+        }
+
+
+        
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -128,53 +122,53 @@
                 a=document.getElementById("applyForm").submit();
             }
 </script>
+
+
 <body>
 <div class="business">
     <!-- <div class="business-div" style="text-align: center;"> -->
-<h1>
-业务： <?php  echo $result['businessname'];?>
-</h1>
-<h2>
-可退回：<?php  echo $canReturn ;?>
-</h2>
-<h3>
-业务审批等级：<?php  echo $dengji; ?>
-</h3>
-<form method="post" action="#" id="applyForm">
 
-<?php if(is_array($ziduan)&&count($ziduan)>0):?>
-<table class="table"  > 
-    <?php $i=1;foreach($ziduan as $key=>$val):?>
-    <tr >
-        <td>
-        
-        <?php echo $val;?>
-        </td>
-        <td>
-        <?php if($attri[$key]==='text'):?>
-            <input type="text" required="true" name=<?php echo $key;?> >
-        <?php elseif($attri[$key]==='int'):?>
-            <input type="text" required="required" name=<?php echo $key;?> >
-        <?php elseif($attri[$key]==='bool'&&$val=='性别'):?>
-            <input type="radio" name=<?php echo $key;?> value="男"  checked="checked" >男
-            <input type="radio" name=<?php echo $key;?> value="女">女
-        <?php elseif($attri[$key]==='bool'&&$val!='性别'):?>
-            <input type="radio" name=<?php echo $key;?> value="是"  checked="checked" >是
-            <input type="radio" name=<?php echo $key;?> value="否" >否
-        <?php else:
-            echo "error";
-            ?>
-        <?php endif;?>
-        
-        </td>
-        
-    </tr>
-    <?php endforeach;?>
-    </table>
-<?php endif;?>
-<input type="hidden" name="ziduan"  value=<?php echo $result['texts']; ?>  readonly="true"   >
-<input type="hidden" name="no"  value=<?php echo $no;?>  readonly="true"   >
-<input type="submit" name="pubMsg" value="提交申请">
+<h2>
+用户ID： <?php  echo $no;?>
+<br>
+用户名： <?php  echo $result['username']?>
+<br>
+性 别 ： <?php  echo $result['sex'];?>
+<br>
+学 院 ： <?php  echo $result['academy'];?>
+<br>
+班 级 ： <?php  echo $result['class'];?>
+<br>
+权 限 ：<?php  
+    echo $result['role'];
+ ?>
+</h2>
+
+<form method="post" action="#" id="applyForm" content-type="multipart/form-data">
+<input type="checkbox" name="auth-admin" id='admin-ck' value="admin" <?php if (($result['role']>>2)%2==1) echo 'checked="checked"';?>>管理权限</input>
+<input type="checkbox" name="auth-approval" id="approval-ck" value="approval" <?php if (($result['role']>>1)%2==1) echo 'checked="checked"';?>>审批权限</input>
+<input type="checkbox" name="auth-apply" id="apply-ck" value="apply" <?php if ($result['role']%2==1) echo 'checked="checked"';?>>申请权限</input>
+<br>
+<div class="manage">
+<input type="radio" name="manage" value="class" id='class' checked="checked">班级审批权限</input>
+<input type="radio" name="manage" value="academy" id='academy'>院级审批权限</input>
+<input type="radio" name="manage" value="college" id='college'>校级审批权限</input>
+</div>
+
+<script>
+$(".manage").hide();
+$("#approval-ck").change(function() {
+    if($("#approval-ck").prop("checked")){
+        $("#approval-ck").prop("checked",true);
+        $(".manage").show();
+    }else{
+        $("#approval-ck").prop("checked",false);
+        $(".manage").hide();
+    }
+})
+$("#approval-ck").change();
+</script>
+<input type="submit" name="editAuth" value="权限修改">
 </form>
 
 
