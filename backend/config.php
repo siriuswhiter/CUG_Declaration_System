@@ -41,6 +41,7 @@ function create_tb_users($mysqli){
         sex int,
         academy VARCHAR(32),
         class VARCHAR(32),
+        approval_level  INT NOT NULL DEFAULT '0',
         role int NOT NULL
         )";
     $mysqli->query($que);
@@ -61,7 +62,7 @@ function create_tb_business($mysqli){
         texts VARCHAR(1024) NOT NULL,
         starttime DATETIME NOT NULL,
         endtime DATETIME NOT NULL,
-        approvelevel INT NOT NULL,
+        approvable_level INT NOT NULL,
         allowret INT NOT NULL
     )";
     $mysqli->query($que);
@@ -107,8 +108,8 @@ function create_user_admin($mysqli){
     $salt = md5(time());
     $password = hash("sha256",$password.$salt);
     $role = 7;
-
-    $que = "INSERT INTO users(userid,username,password,salt,role) VALUE ('$userid', '$username', '$password', '$salt','$role')";
+    $approval_level=7;
+    $que = "INSERT INTO users(userid,username,password,salt,role,approval_level) VALUE ('$userid', '$username', '$password', '$salt','$role','$approval_level')";
     $mysqli->query($que);
 }
 

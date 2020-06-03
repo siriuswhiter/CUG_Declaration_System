@@ -1,36 +1,74 @@
 <?php
     require_once '../backend/database.php';
     $applyid=$_GET['applyid'];
-    $sql="select * from apply where applyid='$applyid' ;";
-    $result=query($sql)[0];
+    $userid=$_COOKIE['id'];
+
     
-    // $dengji=$result['approvelevel']-2 ?'三级':'二级';
+    $sql="select approval_level from users where userid='$userid';";
+    
+    $approval_level=query($sql)[0]['approval_level'];
+    $approval_level=intval($approval_level);
+
+    $sql="select * from apply natural join business where applyid='$applyid' ;";
+    
+    $result=query($sql)[0];
+    $no=$result['businessid'];
+    
+    $approvable_level=$result['approvable_level'] ;
+
     if (is_array($result))
     {$ziduan=unserialize( $result['selectinfo']); 
     
+
+    $approval_show=$approval_level&$approvable_level;
+    
     }
+
+    $sql="select ispass from approval where applyid='$applyid'";
+    $ispassInfo=query($sql)[0]['ispass'];
+    
+    if(!$ispassInfo)
+        $ispassInfo=0;
+    $fail=($ispassInfo<0);
+    var_dump($fail);
         
 
     
     $sql="select * from business where businessid='$no' limit 1;";
     $business_result=query($sql)[0];
-    $canReturn=$business_result['allowret']?'是':'否';;
+    $canReturn=$business_result['allowret'];
     $customeinfo=unserialize($result['custominfo']);
     if (isset($_POST['pubMsg']))
     {
         date_default_timezone_set('PRC');
+        
+        
 
-        $businessid=$_POST['no'];##userid 号咋读取还没写。
         $ispass=$_POST['ispass'];
 
-        $userid=9999;
+        $userid=$_COOKIE['id'];
 
-        $sql="INSERT INTO `approval` (`applyid`, `approverid`, `ispass`, `approvertime`) VALUES ('$applyid', '$userid', '$ispass', CURDATE());";
-        echo $sql;
-        if(execute($sql)==false){
+        $sql="INSERT ignore INTO `approval` (`applyid`, `approverid`, `ispass`, `approvertime`) VALUES ('$applyid', '$userid', '0', CURDATE());";
+        
+
+        $sql2="UPDATE `approval` SET ispass = ispass +'$ispass' where applyid=$applyid";
+        $res1=execute($sql);
+        $res2=execute($sql2);
+        if(!$res1&&!$res2){
+            
+            echo ($sql);
+            echo '\n\r';
+            echo ($sql2);
             echo 'insert wrong!';
             die();
         }
+
+        else{
+            echo "<script>alert('审批成功');</script>";
+            $url="applyViewdetail.php?no=".$no;
+            echo "<meta http-equiv='refresh'  content=0.8;url=".$url.'>';
+            print('正在加载，请稍等...<br>一秒后自动跳转。'); 
+                }
         
     }
 
@@ -149,17 +187,89 @@
         
 </table>
 
-
+<?php echo $ispassInfo ;?>
+<?php if ($approvable_level%2):?>
+<?php 
+$tongguo=(($ispassInfo%2)>=1);
+$editbale=($approval_show%2)&&($ispassInfo==0);
+?>
+班级审批：
 <form action="#" method="post">
-<input type="radio" name="ispass" value=1 checked='checked'>通过
-<input type="radio" name="ispass" value=-1>不通过
+<input type="radio" name="ispass" value=1 <?php if ($tongguo) echo "checked='checked'"?> <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>通过
+<input type="radio" name="ispass" value=-9 <?php if ($fail) echo "checked='checked'"?> <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>不通过
 <?php if ($canReturn):?>
-<input type="radio" name="ispass" value=0>退回修改
+<input type="radio" name="ispass" value=0 <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>退回修改
 <?php endif;?>
 <br>
-<input type="submit" value="提交审批结果" name="pubMsg">
+<input type="submit" value="提交审批结果" name="pubMsg"<?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>
+</form>
+<? elseif($ispassInfo==2):
+    $ispassInfo+=1;
+    ?>
+
+<?php endif ?>
+
+
+
+
+
+<?php if (floor(($approvable_level%4)/2)):?>
+    <?php 
+    $tongguo=(($ispassInfo%4)>=2);
+    $editbale=(floor(($approval_show%4)/2))&&($ispassInfo==1);
+?>
+
+院级审批：
+<form action="#" method="post">
+<input type="radio" name="ispass" value=2 <?php if ($tongguo) echo "checked='checked'"?> <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>通过
+<input type="radio" name="ispass" value=-20 <?php if ($fail) echo "checked='checked'"?> <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>不通过
+<?php if ($canReturn):?>
+<input type="radio" name="ispass" value=0 <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>退回修改
+<?php endif;?>
+<br>
+<input type="submit" value="提交审批结果" name="pubMsg"<?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>
 
 </form>
+
+<? elseif($ispassInfo==1):
+    $ispassInfo+=2;
+    ?>
+
+<?php endif ?>
+
+
+
+<?php if (floor(($approvable_level>=4))):?>
+
+    校级审批：
+<?php 
+    $tongguo=($ispassInfo>=4);
+    $editbale=(floor($approval_show/4))&&($ispassInfo==3);
+?>
+
+<br>
+<form action="#" method="post">
+<input type="radio" name="ispass" value=4 <?php if ($tongguo) echo "checked='checked'"?> <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?> >通过
+<input type="radio" name="ispass" value=-100 <?php if ($fail) echo 'checked=True'?>  <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>不通过
+<?php if ($canReturn):?>
+<input type="radio" name="ispass" value=0 <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>退回修改
+<?php endif;?>
+<br>
+<input type="submit" value="提交审批结果" name="pubMsg" <?php if ($tongguo||$fail||!$editbale) echo "disabled=True"?>>
+</form>
+
+<? elseif($ispassInfo==0):
+    $ispassInfo+=4;
+    ?>
+
+<?php endif ?>
+
+
+
+
+
     </div>
+
+
 </body>
 </html>

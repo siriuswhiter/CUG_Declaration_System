@@ -34,7 +34,7 @@
             die();
         }
         //想要个弹窗申请成功
-        header('Location:../index.php');
+        header('Location:infocenter.html#applied');
     }
 ?>
 
